@@ -1,0 +1,17 @@
+import { CommentItem, HackerNewsProvider, Story } from "./types";
+import { bestStoriesMock } from "../../mock/bestStories";
+import { mockComments } from "../../mock/comments";
+
+export class HackerNewsMockProvider implements HackerNewsProvider {
+  async getBestStories(): Promise<Story[]> {
+    return bestStoriesMock;
+  }
+
+  async getComments(story: Story): Promise<CommentItem[]> {
+    return story.kids.reduce<CommentItem[]>((acc, cur) => {
+      const comment = mockComments[cur.toString()];
+      if (comment) acc.push(comment);
+      return acc;
+    }, []);
+  }
+}
