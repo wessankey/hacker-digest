@@ -2,20 +2,19 @@
 
 import { useState } from "react";
 import { Modal } from "./Modal";
-import { fetchCommentSummary } from "@/api/commentSummary";
+import { CommentSummary, fetchCommentSummary } from "@/api/commentSummary";
 import { Story } from "@/providers/hackernews/types";
 
 export function BestStories({ stories }: { stories: Story[] }) {
   const [selectedStory, setSelectedStory] = useState<Story | null>(null);
   const [loading, setLoading] = useState(false);
-  const [summary, setSummary] = useState("");
+  const [summary, setSummary] = useState<CommentSummary | null>(null);
 
   const handleSelectStory = async (story: Story) => {
     setSelectedStory(story);
     setLoading(true);
     const result = await fetchCommentSummary(story);
-    console.log(JSON.stringify(result, null, 2));
-    setSummary("result");
+    setSummary(result);
     setLoading(false);
   };
 
@@ -35,7 +34,7 @@ export function BestStories({ stories }: { stories: Story[] }) {
         <Modal onClose={() => setSelectedStory(null)}>
           <div>{selectedStory.title}</div>
           {loading && <div>Loading...</div>}
-          <div>{summary}</div>
+          <div>{summary?.summary}</div>
         </Modal>
       )}
     </div>

@@ -3,24 +3,61 @@
 import { createProvider } from "@/providers/hackernews";
 import { CommentItem, Story } from "@/providers/hackernews/types";
 import { anthropic } from "@ai-sdk/anthropic";
-import { generateText } from "ai";
+import { generateObject } from "ai";
+import { promises as fs } from "fs";
+import Handlebars from "handlebars";
+import { decode } from "html-entities";
+import { z } from "zod";
+
+Handlebars.registerHelper({
+  json: function (context) {
+    return JSON.stringify(context, null, 2);
+  },
+});
+
+const commentSummarySchema = z.object({
+  summary: z.string(),
+  keyInsights: z.array(z.string()),
+  sentiment: z.string(),
+  justification: z.string(),
+});
+
+export type CommentSummary = z.infer<typeof commentSummarySchema>;
 
 export async function fetchCommentSummary(story: Story) {
   const provider = createProvider();
   const comments = await provider.getComments(story);
-
-  return comments;
-
-  // return await summarizeComments(commentDetailsParsed);
+  return await summarizeComments(story.title, comments);
 }
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-async function summarizeComments(comments: CommentItem[]) {
-  const { text } = await generateText({
-    model: anthropic("claude-3-haiku-20240307"),
-    system: "You are a helpful assistant that summarizes comments.",
-    prompt: "Write a vegetarian lasagna recipe for 4 people.",
+async function summarizeComments(
+  title: string,
+  comments: CommentItem[]
+): Promise<CommentSummary> {
+  const promptSource = await fs.readFile(
+    process.cwd() + "/src/prompts/comments.hbs",
+    { encoding: "utf-8" }
+  );
+
+  const parsedComments = comments.map((comment) => ({
+    by: comment.by,
+    text: decode(comment.text),
+    time: comment.time,
+  }));
+
+  const promptTemplate = Handlebars.compile(promptSource);
+  const prompt = promptTemplate({
+    storyTitle: title,
+    comments: parsedComments,
   });
 
-  return text;
+  const { object } = await generateObject({
+    model: anthropic("claude-3-5-sonnet-latest"),
+    system:
+      "You are a helpful assistant that summarizes comments from a Hacker News story.",
+    prompt: prompt,
+    schema: commentSummarySchema,
+  });
+
+  return object;
 }
