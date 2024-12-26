@@ -1,8 +1,8 @@
 "use server";
 
-import { createProvider } from "./providers/hackernews";
-import { Story } from "./providers/hackernews/types";
-import { createSummaryService } from "./services/summaryService";
+import { createProvider } from "./services/hackernews";
+import { Story } from "./services/hackernews/types";
+import { createSummaryService } from "./services/summary";
 
 export async function fetchCommentSummary(story: Story) {
   const provider = createProvider();

@@ -1,4 +1,4 @@
-import { CommentItem } from "@/api/providers/hackernews/types";
+import { CommentItem } from "@/api/services/hackernews/types";
 
 export const mockComments: Record<string, CommentItem> = {
   "42342572": {

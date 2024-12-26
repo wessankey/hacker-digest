@@ -3,8 +3,8 @@
 import { useState } from "react";
 import { Modal } from "./Modal";
 import { fetchCommentSummary } from "@/api/commentSummary";
-import { Story } from "@/api/providers/hackernews/types";
-import { CommentSummary } from "@/api/services/summaryService/schema";
+import { Story } from "@/api/services/hackernews/types";
+import { CommentSummary } from "@/api/services/summary/schema";
 
 export function BestStories({ stories }: { stories: Story[] }) {
   const [selectedStory, setSelectedStory] = useState<Story | null>(null);

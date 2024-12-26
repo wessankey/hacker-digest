@@ -1,4 +1,4 @@
-import { CommentItem } from "@/api/providers/hackernews/types";
+import { CommentItem } from "@/api/services/hackernews/types";
 import { z } from "zod";
 
 export const commentSummarySchema = z.object({

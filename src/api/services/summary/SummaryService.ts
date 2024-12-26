@@ -2,7 +2,7 @@ import { anthropic } from "@ai-sdk/anthropic";
 import { generateObject } from "ai";
 import { promises as fs } from "fs";
 import { decode } from "html-entities";
-import { CommentItem } from "../../providers/hackernews/types";
+import { CommentItem } from "../hackernews/types";
 import {
   CommentSummary,
   commentSummarySchema,
