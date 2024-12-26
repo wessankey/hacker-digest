@@ -1,4 +1,4 @@
-import { createProvider } from "@/providers/hackernews";
+import { createProvider } from "@/api/providers/hackernews";
 import { BestStories } from "./components/BestStories";
 
 export default async function Home() {

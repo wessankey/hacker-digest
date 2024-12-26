@@ -9,10 +9,7 @@ export const useClickOutside = <T extends HTMLElement>(
 
   useEffect(() => {
     const handleClick = (event: MouseEvent | TouchEvent): void => {
-      // Type guard to ensure event.target is a Node
-      if (!(event.target instanceof Node)) {
-        return;
-      }
+      if (!(event.target instanceof Node)) return;
 
       if (ref.current && !ref.current.contains(event.target)) {
         callback();

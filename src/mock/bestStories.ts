@@ -1,4 +1,4 @@
-import { Story } from "@/providers/hackernews/types";
+import { Story } from "@/api/providers/hackernews/types";
 
 export const bestStoriesMock: Story[] = [
   {

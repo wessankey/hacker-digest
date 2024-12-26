@@ -1,13 +1,14 @@
 "use server";
 
-import { createProvider } from "@/providers/hackernews";
-import { CommentItem, Story } from "@/providers/hackernews/types";
 import { anthropic } from "@ai-sdk/anthropic";
 import { generateObject } from "ai";
 import { promises as fs } from "fs";
 import Handlebars from "handlebars";
 import { decode } from "html-entities";
 import { z } from "zod";
+import { CommentItem } from "./providers/hackernews/types";
+import { createProvider } from "./providers/hackernews";
+import { Story } from "./providers/hackernews/types";
 
 Handlebars.registerHelper({
   json: function (context) {

@@ -1,6 +1,6 @@
+import { bestStoriesMock } from "@/mock/bestStories";
+import { mockComments } from "@/mock/comments";
 import { CommentItem, HackerNewsProvider, Story } from "./types";
-import { bestStoriesMock } from "../../mock/bestStories";
-import { mockComments } from "../../mock/comments";
 
 export class HackerNewsMockProvider implements HackerNewsProvider {
   async getBestStories(): Promise<Story[]> {
