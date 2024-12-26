@@ -1,4 +1,4 @@
-import { CommentSummary } from "@/api/commentSummary";
+import { CommentSummary } from "@/api/services/summaryService/schema";
 
 export const commentSummary: CommentSummary = {
   summary:
