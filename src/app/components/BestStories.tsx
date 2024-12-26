@@ -20,7 +20,7 @@ export function BestStories({ stories }: { stories: Story[] }) {
   };
 
   return (
-    <div className="flex gap-4 m-10 flex-wrap">
+    <div className="flex gap-4 my-10 flex-wrap">
       {stories.map((story) => {
         return (
           <StoryTile
@@ -33,9 +33,9 @@ export function BestStories({ stories }: { stories: Story[] }) {
 
       {selectedStory && (
         <Modal onClose={() => setSelectedStory(null)}>
-          <div>{selectedStory.title}</div>
+          <h3 className="text-2xl font-bold">{selectedStory.title}</h3>
           {loading && <div>Loading...</div>}
-          <div>{summary?.summary}</div>
+          <div className="mt-6">{summary?.summary}</div>
         </Modal>
       )}
     </div>
@@ -51,7 +51,7 @@ function StoryTile({
 }) {
   return (
     <div
-      className="border border-gray-300 w-48 rounded-md p-4 flex-shrink-0 text-center font-medium shadow-sm hover:shadow-md transition-shadow duration-200 hover:cursor-pointer"
+      className=" text-white h-24 w-48 rounded-md p-4 flex-shrink-0 text-center hover:scale-105 font-medium shadow-sm hover:shadow-md transition-shadow duration-200 hover:cursor-pointer flex items-center justify-center bg-slate-800"
       onClick={() => onSelect(story)}
     >
       {story.title}
