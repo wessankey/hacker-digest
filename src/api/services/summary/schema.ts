@@ -5,6 +5,7 @@ export const commentSummarySchema = z.object({
   summary: z.string(),
   keyInsights: z.array(z.string()),
   sentiment: z.string(),
+  sentimentEmoji: z.string(),
   justification: z.string(),
 });
 

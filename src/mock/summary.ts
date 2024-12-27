@@ -1,15 +1,15 @@
 import { CommentSummary } from "@/api/services/summary/schema";
 
 export const commentSummary: CommentSummary = {
-  summary:
-    "The discussion around OpenAI's Sora release reveals a complex mix of technical critique, ethical concerns, and practical limitations. Many users expressed frustration with access issues and OpenAI's rollout strategy. There was significant debate about the quality of the generated videos, with some noting impressive capabilities while others pointed out obvious flaws in physics and consistency. A major theme was concern about societal implications, including potential misuse for disinformation and the impact on creative industries. Technical users discussed limitations like GPU costs and lack of API access, while others focused on comparison with existing solutions like HunyuanVideo.",
+  summary: `The discussion revolves around Google's announcement of their Willow quantum chip, with commenters debating its significance and implications. There's considerable skepticism about Google's claims, particularly regarding the "septillion years" benchmark comparison and quantum supremacy claims. Many commenters question the practical applications of the technology, while others focus on the technical achievement of error correction improvements. The conversation also touches on philosophical implications regarding multiverse theory, with several commenters expressing skepticism about these theoretical connections. There's notable discussion about the benchmark methodology and whether random circuit sampling (RCS) is a meaningful measure of quantum computing progress.`,
   keyInsights: [
-    "The computational cost of running Sora at scale is extremely high - one commenter noted that generating a 5-second video requires 5 minutes on 8xH100 GPUs, making mass adoption potentially very expensive",
-    "Many users identified consistent issues with physics and temporal consistency in the generated videos, particularly with things like footprints, water movement, and object interactions",
-    "There's significant concern about the societal impact, particularly regarding disinformation and the need for proper labeling/watermarking of AI-generated content",
-    "The lack of API access and limited availability (especially in EU/UK) suggests OpenAI may be shifting from an infrastructure company to a product company",
+    "The chip's ability to reduce errors as it scales up (getting 'exponentially better as they get bigger') represents a significant breakthrough in quantum error correction, potentially solving a major roadblock in quantum computing development",
+    "There's significant skepticism about Google's benchmark claims, with several experts pointing out that the random circuit sampling (RCS) benchmark may not translate to practical quantum computing applications",
+    "The announcement has sparked debate about the relationship between quantum computing and the multiverse theory, with many commenters questioning the scientific validity of connecting these concepts",
+    "There are concerns about the implications for current cryptography systems, though some argue that the focus on cryptography breaking is overshadowing more meaningful potential applications in materials science and medicine",
   ],
-  sentiment: "negative",
+  sentiment: "mixed-skeptical",
+  sentimentEmoji: "🤨",
   justification:
-    'The overall sentiment is predominantly negative, evidenced by: 1) Numerous complaints about access issues and OpenAI\'s rollout strategy ("can\'t even log in", "account creation unavailable"), 2) Widespread criticism of the output quality ("weird uncanny valley effects", "shitty", "garbage quality"), 3) Strong concerns about societal implications ("enshitification of everything", "dead internet theory becoming more prevalent"), 4) Frustration with pricing and technical limitations. While there are some positive comments about the technical achievement, they are significantly outnumbered by critical and concerned responses.',
+    "The sentiment is predominantly skeptical with mixed reactions because: 1) Multiple technical experts express doubt about Google's claims and methodology (e.g., GilKalai's detailed critique), 2) While some commenters acknowledge the technical achievement, especially regarding error correction, there's widespread skepticism about the practical implications and benchmark methodology, 3) Many comments question the multiverse theory connections and marketing language used in the announcement, 4) There are some positive comments about the technical achievement, but they're often tempered with caveats about practical applications.",
 };

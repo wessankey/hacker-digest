@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@ai-sdk/anthropic": "^1.0.5",
+    "@headlessui/react": "^2.2.0",
     "ai": "^4.0.21",
     "firebase": "^11.1.0",
     "handlebars": "^4.7.8",
