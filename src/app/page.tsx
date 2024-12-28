@@ -6,7 +6,7 @@ export default async function Home() {
   const stories = await provider.getBestStories();
 
   return (
-    <div className="p-12">
+    <div className="p-12 max-w-[1100px] mx-auto">
       <h1 className="text-5xl font-bold text-white">HackerDigest ⚡️📰</h1>
       <h2 className="text-xl text-white mt-6">
         AI summaries of the top Hacker News story comments
