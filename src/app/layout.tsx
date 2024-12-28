@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
+import { DarkModeToggle } from "./components/DarkModeToggle";
+import { Providers } from "./providers";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -18,11 +20,16 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <body
-        className={`${inter.className} antialiased bg-slate-900 h-screen w-full relative`}
-      >
-        {children}
+    <html lang="en" suppressHydrationWarning>
+      <body className={`${inter.className} antialiased  h-screen w-full`}>
+        <Providers>
+          <div className="dark:bg-slate-900 light:bg-slate-100 h-screen w-full relative flex flex-col">
+            <div className="flex justify-end px-6 py-4">
+              <DarkModeToggle />
+            </div>
+            {children}
+          </div>
+        </Providers>
       </body>
     </html>
   );
