@@ -67,7 +67,7 @@ function StoryTile({
       className=" text-white h-24 w-48 rounded-md p-4 flex-shrink-0 text-center hover:scale-105  shadow-lg hover:shadow-md transition-shadow duration-200 hover:cursor-pointer flex items-center justify-center bg-slate-800 bg-opacity-50 font-semibold"
       onClick={() => onSelect(story)}
     >
-      <p className="blur-none bg-opacity-0">{story.title}</p>
+      <p className="blur-none bg-opacity-0 line-clamp-2">{story.title}</p>
     </div>
   );
 }
