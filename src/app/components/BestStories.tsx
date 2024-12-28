@@ -22,7 +22,7 @@ export function BestStories({ stories }: { stories: Story[] }) {
   };
 
   return (
-    <div className="my-10 grid lg:grid-cols-4 gap-x-12 gap-y-4 lg:max-w-[850px] md:grid-cols-3 md:max-w-[600px] sm:max-w-full sm:grid-cols-2">
+    <div className="my-10 grid lg:grid-cols-4 gap-x-12 gap-y-4 lg:max-w-[850px] md:grid-cols-2 md:max-w-[600px] max-w-full grid-cols-1">
       {stories.map((story) => {
         return (
           <StoryTile
@@ -64,7 +64,7 @@ function StoryTile({
 }) {
   return (
     <div
-      className=" text-white h-24 md:w-48 sm:w-64 rounded-md p-4 flex-shrink-0 text-center hover:scale-105  shadow-lg hover:shadow-md transition-shadow duration-200 hover:cursor-pointer flex items-center justify-center bg-slate-800 bg-opacity-50 font-semibold"
+      className=" text-white h-24 md:w-64 lg:w-48 w-full rounded-md p-4 flex-shrink-0 text-center hover:scale-105  shadow-lg hover:shadow-md transition-shadow duration-200 hover:cursor-pointer flex items-center justify-center bg-slate-800 bg-opacity-50 font-semibold"
       onClick={() => onSelect(story)}
     >
       <p className="blur-none bg-opacity-0 line-clamp-2">{story.title}</p>
