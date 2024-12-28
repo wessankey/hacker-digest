@@ -22,9 +22,7 @@ export default function RootLayout({
       <body
         className={`${inter.className} antialiased bg-slate-900 h-screen w-full relative`}
       >
-        <div className="bg-cover bg-[url('../images/background.svg')]	 min-h-screen">
-          {children}
-        </div>
+        {children}
       </body>
     </html>
   );
