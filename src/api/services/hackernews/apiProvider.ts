@@ -17,7 +17,7 @@ export class HackerNewsAPIProvider implements HackerNewsProvider {
     const bestStoryIds = BestStoriesSchema.parse(data);
 
     const bestStories = await Promise.all(
-      bestStoryIds.slice(0, 2).map(async (id) => {
+      bestStoryIds.slice(0, 16).map(async (id) => {
         const response = await fetch(`${this.baseUrl}/item/${id}.json`);
         const data = await response.json();
         return StorySchema.parse(data);

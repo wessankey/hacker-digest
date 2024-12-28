@@ -11,7 +11,9 @@ export default async function Home() {
       <h2 className="text-xl text-white mt-6">
         AI summaries of the top Hacker News story comments
       </h2>
-      <BestStories stories={stories} />
+      <div className="flex justify-center">
+        <BestStories stories={stories} />
+      </div>
     </div>
   );
 }
