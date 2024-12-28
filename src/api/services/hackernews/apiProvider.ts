@@ -7,7 +7,6 @@ import {
   Story,
   StorySchema,
 } from "./types";
-import { createStory } from "../cache";
 
 export class HackerNewsAPIProvider implements HackerNewsProvider {
   private readonly baseUrl = "https://hacker-news.firebaseio.com/v0/";
@@ -22,12 +21,6 @@ export class HackerNewsAPIProvider implements HackerNewsProvider {
         const response = await fetch(`${this.baseUrl}/item/${id}.json`);
         const data = await response.json();
         return StorySchema.parse(data);
-      })
-    );
-
-    await Promise.all(
-      bestStories.map(async (story) => {
-        await createStory(story);
       })
     );
 

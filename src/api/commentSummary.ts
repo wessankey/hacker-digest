@@ -6,7 +6,10 @@ import { createSummaryService } from "./services/summary";
 
 export async function fetchCommentSummary(story: Story) {
   const provider = createProvider();
-  const comments = await provider.getComments(story);
   const summaryService = createSummaryService();
-  return await summaryService.summarizeComments(story.title, comments);
+  const cachedSummary = await summaryService.getCachedSummary(story.id);
+  if (cachedSummary) return cachedSummary;
+
+  const comments = await provider.getComments(story);
+  return await summaryService.getSummary(story, comments);
 }

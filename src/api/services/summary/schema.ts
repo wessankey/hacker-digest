@@ -1,4 +1,4 @@
-import { CommentItem } from "@/api/services/hackernews/types";
+import { CommentItem, Story } from "@/api/services/hackernews/types";
 import { z } from "zod";
 
 export const commentSummarySchema = z.object({
@@ -12,6 +12,11 @@ export const commentSummarySchema = z.object({
 export type CommentSummary = z.infer<typeof commentSummarySchema>;
 
 export type TSummaryService = {
+  getSummary: (
+    story: Story,
+    comments: CommentItem[]
+  ) => Promise<CommentSummary>;
+  getCachedSummary: (storyId: number) => Promise<CommentSummary | undefined>;
   summarizeComments: (
     title: string,
     comments: CommentItem[]

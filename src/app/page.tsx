@@ -7,7 +7,7 @@ export default async function Home() {
 
   return (
     <div className="p-12">
-      <h1 className="text-5xl font-bold text-white">HackerDigest 🔮</h1>
+      <h1 className="text-5xl font-bold text-white">HackerDigest ⚡️📰</h1>
       <h2 className="text-xl text-white mt-6">
         AI summaries of the top Hacker News story comments
       </h2>

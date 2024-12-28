@@ -1,14 +1,15 @@
 import { anthropic } from "@ai-sdk/anthropic";
 import { generateObject } from "ai";
 import { promises as fs } from "fs";
+import Handlebars from "handlebars";
 import { decode } from "html-entities";
-import { CommentItem } from "../hackernews/types";
+import { createSummary, getSummary } from "../cache";
+import { CommentItem, Story } from "../hackernews/types";
 import {
   CommentSummary,
   commentSummarySchema,
   TSummaryService,
 } from "./schema";
-import Handlebars from "handlebars";
 
 Handlebars.registerHelper({
   json: function (context) {
@@ -17,6 +18,17 @@ Handlebars.registerHelper({
 });
 
 export class SummaryService implements TSummaryService {
+  async getSummary(story: Story, comments: CommentItem[]) {
+    const summary = await this.summarizeComments(story.title, comments);
+    await createSummary(story.id, summary);
+    return summary;
+  }
+
+  async getCachedSummary(storyId: number): Promise<CommentSummary | undefined> {
+    const cachedSummary = await getSummary(storyId);
+    if (cachedSummary) return cachedSummary;
+  }
+
   async summarizeComments(
     title: string,
     comments: CommentItem[]
