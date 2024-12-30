@@ -46,7 +46,7 @@ export function BestStories({ stories }: { stories: Story[] }) {
           {!loading && summary && <SummaryDetail summary={summary} />}
 
           <button
-            className="mt-6 border border-white hover:bg-slate-500 text-white px-4 py-2 rounded-md"
+            className="mt-6 border dark:border-white border-gray-700 hover:bg-slate-500 dark:text-white text-gray-700 px-4 py-2 rounded-md"
             onClick={() => setSelectedStory(null)}
           >
             Close
