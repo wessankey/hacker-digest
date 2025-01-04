@@ -46,7 +46,7 @@ export function BestStories({ stories }: { stories: Story[] }) {
           {!loading && summary && <SummaryDetail summary={summary} />}
 
           <button
-            className="mt-6 border dark:border-white border-gray-700 hover:bg-slate-500 dark:text-white text-gray-700 px-4 py-2 rounded-md"
+            className="mt-6 dark:bg-indigo-600 bg-indigo-300 hover:bg-indigo-400  dark:hover:bg-indigo-700 dark:text-white text-gray-700 px-4 py-2 rounded-md font-bold"
             onClick={() => setSelectedStory(null)}
           >
             Close
@@ -66,7 +66,7 @@ function StoryTile({
 }) {
   return (
     <div
-      className="h-24 md:w-64 lg:w-48 w-full rounded-md p-4 flex-shrink-0 text-center hover:scale-105  shadow-lg hover:shadow-md transition-shadow duration-200 hover:cursor-pointer flex items-center justify-center dark:bg-slate-800 bg-slate-300 bg-opacity-50 font-semibold"
+      className="h-24 md:w-64 lg:w-48 w-full rounded-md p-4 flex-shrink-0 text-center hover:scale-105  shadow-lg hover:shadow-md transition-shadow duration-200 hover:cursor-pointer flex items-center justify-center dark:bg-indigo-700  bg-indigo-300 bg-opacity-50 font-semibold"
       onClick={() => onSelect(story)}
     >
       <p className="blur-none bg-opacity-0 line-clamp-2">{story.title}</p>
@@ -113,7 +113,7 @@ function SummaryDetail({ summary }: { summary: CommentSummary }) {
 
   return (
     <div className="mt-6">
-      <div className="flex h-screen w-full justify-center">
+      <div className="flex w-full justify-center">
         <div className="w-full">
           <TabGroup>
             <TabList className="flex gap-4">
@@ -158,7 +158,7 @@ function SummaryDetailTab({ label }: { label: string }) {
   return (
     <Tab
       key="name"
-      className="rounded-full py-1 px-3 text-sm/6 font-semibold focus:outline-none data-[focus]:outline-1 dark:text-white dark:data-[selected]:bg-white/10 dark:data-[selected]:data-[hover]:bg-white/10 dark:data-[hover]:bg-white/5 dark:data-[focus]:outline-white data-[selected]:bg-violet-500/30 data-[selected]:data-[hover]:bg-violet-500/30 data-[selected]:text-violet-900 data-[hover]:bg-violet-500/20 hover:bg-violet-500/10 data-[focus]:outline-violet-500"
+      className="rounded-full py-1 px-3 text-sm/6 font-semibold focus:outline-none data-[focus]:outline-1 dark:text-white dark:data-[selected]:bg-white/10 dark:data-[selected]:data-[hover]:bg-white/10 dark:data-[hover]:bg-white/5 dark:data-[focus]:outline-white data-[selected]:bg-indigo-500/30 data-[selected]:data-[hover]:bg-indigo-500/30 data-[selected]:text-indigo-900 data-[hover]:bg-indigo-500/20 hover:bg-indigo-500/10 data-[focus]:outline-indigo-500"
     >
       {label}
     </Tab>

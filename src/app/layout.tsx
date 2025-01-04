@@ -21,9 +21,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className={`${inter.className} antialiased h-full w-full`}>
+      <body className={`${inter.className} antialiased h-screen w-full`}>
         <Providers>
-          <div className="dark:bg-slate-900 light:bg-slate-100 h-full w-full relative flex flex-col">
+          <div className="dark:bg-zinc-800 light:bg-slate-100 h-full w-full relative flex flex-col">
             <div className="flex justify-end px-6 py-4">
               <DarkModeToggle />
             </div>
