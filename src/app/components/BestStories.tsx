@@ -3,13 +3,13 @@
 import { fetchCommentSummary } from "@/api/commentSummary";
 import { Story } from "@/api/services/hackernews/types";
 import { CommentSummary } from "@/api/services/summary/schema";
+import { useScreenSize } from "@/hooks/useScreenSize";
+import { capitalizeString } from "@/utils/string";
 import { Tab, TabGroup, TabList, TabPanel, TabPanels } from "@headlessui/react";
+import { Lightbulb } from "lucide-react";
 import { useState } from "react";
 import { LoadingSkeleton } from "./LoadingSkeleton";
 import { Modal } from "./Modal";
-import { Lightbulb } from "lucide-react";
-import { useScreenSize } from "@/hooks/useScreenSize";
-import { capitalizeString } from "@/utils/string";
 
 export function BestStories({ stories }: { stories: Story[] }) {
   const [selectedStory, setSelectedStory] = useState<Story | null>(null);
@@ -85,36 +85,13 @@ function SummaryDetail({ summary }: { summary: CommentSummary }) {
   if (screenSize === "xs" || screenSize === "sm") {
     return (
       <div>
-        <div className="mt-6">
-          <p className="text-lg font-bold">Summary</p>
-          <p
-            className="mt-4"
-            dangerouslySetInnerHTML={{ __html: summary?.summary }}
-          />
-        </div>
-
+        <Summary summary={summary} />
         <div className="border-b border-gray-300 mt-6" />
 
-        <div className="mt-6">
-          <p className="text-lg font-bold">
-            <span> {summary?.sentiment}</span>{" "}
-            <span className="text-2xl">{summary?.sentimentEmoji}</span>
-          </p>
-          <p className="mt-4">{summary?.justification}</p>
-        </div>
-
+        <Sentiment summary={summary} />
         <div className="border-b border-gray-300 mt-6" />
 
-        <div className="mt-6">
-          <ul className="list-none list-inside space-y-4">
-            {summary?.keyInsights.map((insight) => (
-              <li key={insight} className="flex items-start gap-3">
-                <Lightbulb className="w-5 h-5 text-amber-500 mt-1 flex-shrink-0" />
-                <span>{insight}</span>
-              </li>
-            ))}
-          </ul>
-        </div>
+        <KeyInsights summary={summary} />
       </div>
     );
   }
@@ -131,36 +108,62 @@ function SummaryDetail({ summary }: { summary: CommentSummary }) {
             </TabList>
             <TabPanels className="mt-3">
               <TabPanel key="name" className="rounded-xl px-3">
-                <div className="h-[23.75rem] overflow-y-auto">
-                  <p
-                    className="mt-4"
-                    dangerouslySetInnerHTML={{ __html: summary?.summary }}
-                  />
-                </div>
+                <Summary summary={summary} />
               </TabPanel>
 
               <TabPanel key="sentiment" className="rounded-xl p-3">
-                <p className="text-lg font-bold">
-                  <span> {capitalizeString(summary?.sentiment)}</span>{" "}
-                  <span className="text-2xl">{summary?.sentimentEmoji}</span>
-                </p>
-                <p className="mt-4">{summary?.justification}</p>
+                <Sentiment summary={summary} />
               </TabPanel>
 
               <TabPanel key="insights" className="rounded-xl p-3">
-                <ul className="list-none list-inside space-y-4">
-                  {summary?.keyInsights.map((insight) => (
-                    <li key={insight} className="flex items-start gap-3">
-                      <Lightbulb className="w-5 h-5 text-amber-500 mt-1 flex-shrink-0" />
-                      <span>{insight}</span>
-                    </li>
-                  ))}
-                </ul>
+                <KeyInsights summary={summary} />
               </TabPanel>
             </TabPanels>
           </TabGroup>
         </div>
       </div>
+    </div>
+  );
+}
+
+function Summary({ summary }: { summary: CommentSummary }) {
+  const screenSize = useScreenSize();
+  const isMobile = screenSize === "xs" || screenSize === "sm";
+
+  return (
+    <div className="mt-6 overflow-y-auto md:h-[23.75rem] md:mt-3">
+      {isMobile && <p className="text-lg font-bold">Summary</p>}
+      <p
+        className="mt-4"
+        dangerouslySetInnerHTML={{ __html: summary?.summary }}
+      />
+    </div>
+  );
+}
+
+function Sentiment({ summary }: { summary: CommentSummary }) {
+  return (
+    <div className="mt-6 md:mt-0">
+      <p className="text-lg font-bold">
+        <span> {capitalizeString(summary?.sentiment)}</span>{" "}
+        <span className="text-2xl">{summary?.sentimentEmoji}</span>
+      </p>
+      <p className="mt-4">{summary?.justification}</p>
+    </div>
+  );
+}
+
+function KeyInsights({ summary }: { summary: CommentSummary }) {
+  return (
+    <div className="mt-6 md:mt-0">
+      <ul className="list-none list-inside space-y-4">
+        {summary?.keyInsights.map((insight) => (
+          <li key={insight} className="flex items-start gap-3">
+            <Lightbulb className="w-5 h-5 text-amber-500 mt-1 flex-shrink-0" />
+            <span>{insight}</span>
+          </li>
+        ))}
+      </ul>
     </div>
   );
 }
