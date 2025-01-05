@@ -1,8 +1,9 @@
 import { anthropic } from "@ai-sdk/anthropic";
 import { generateObject } from "ai";
-import { promises as fs } from "fs";
+import { readFileSync } from "fs";
 import Handlebars from "handlebars";
 import { decode } from "html-entities";
+import path from "path";
 import { createSummary, getSummary } from "../cache";
 import { CommentItem, Story } from "../hackernews/types";
 import {
@@ -33,9 +34,9 @@ export class SummaryService implements TSummaryService {
     title: string,
     comments: CommentItem[]
   ): Promise<CommentSummary> {
-    const promptSource = await fs.readFile(
-      process.cwd() + "/src/prompts/comments.hbs",
-      { encoding: "utf-8" }
+    const promptSource = readFileSync(
+      path.join(process.cwd(), "/src/prompts/comments.hbs"),
+      "utf8"
     );
 
     const parsedComments = comments.map((comment) => ({
