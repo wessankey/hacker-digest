@@ -37,20 +37,24 @@ export function BestStories({ stories }: { stories: Story[] }) {
 
       {selectedStory && (
         <Modal isOpen={!!selectedStory} onClose={() => setSelectedStory(null)}>
-          <h3 className="text-2xl font-bold">{selectedStory.title}</h3>
-          {loading && (
-            <div className="mt-6">
-              <LoadingSkeleton />
+          <div className="flex flex-col items-start md:h-full justify-between">
+            <div className="w-full">
+              <h3 className="text-2xl font-bold">{selectedStory.title}</h3>
+              {loading && (
+                <div className="mt-6">
+                  <LoadingSkeleton />
+                </div>
+              )}
+              {!loading && summary && <SummaryDetail summary={summary} />}
             </div>
-          )}
-          {!loading && summary && <SummaryDetail summary={summary} />}
 
-          <button
-            className="mt-6 dark:bg-indigo-600 bg-indigo-300 hover:bg-indigo-400  dark:hover:bg-indigo-700 dark:text-white text-gray-700 px-4 py-2 rounded-md font-bold"
-            onClick={() => setSelectedStory(null)}
-          >
-            Close
-          </button>
+            <button
+              className="mt-6 dark:bg-indigo-600 bg-indigo-300 hover:bg-indigo-400  dark:hover:bg-indigo-700 dark:text-white text-gray-700 px-4 py-2 rounded-md font-bold"
+              onClick={() => setSelectedStory(null)}
+            >
+              Close
+            </button>
+          </div>
         </Modal>
       )}
     </div>
@@ -102,7 +106,7 @@ function SummaryDetail({ summary }: { summary: CommentSummary }) {
             {summary?.keyInsights.map((insight) => (
               <li key={insight} className="flex items-start gap-3">
                 <Lightbulb className="w-5 h-5 text-amber-500 mt-1 flex-shrink-0" />
-                <span className="text-gray-700 dark:text-white">{insight}</span>
+                <span>{insight}</span>
               </li>
             ))}
           </ul>
@@ -112,9 +116,9 @@ function SummaryDetail({ summary }: { summary: CommentSummary }) {
   }
 
   return (
-    <div className="mt-6">
-      <div className="flex w-full justify-center">
-        <div className="w-full">
+    <div className="mt-6 ">
+      <div className="flex w-full justify-center h-full ">
+        <div className="w-full ">
           <TabGroup>
             <TabList className="flex gap-4">
               <SummaryDetailTab label="Summary" />
@@ -122,8 +126,10 @@ function SummaryDetail({ summary }: { summary: CommentSummary }) {
               <SummaryDetailTab label="Key Insights" />
             </TabList>
             <TabPanels className="mt-3">
-              <TabPanel key="name" className="rounded-xl p-3">
-                {summary?.summary}
+              <TabPanel key="name" className="rounded-xl px-3">
+                <div className="h-[23.75rem] overflow-y-auto">
+                  {summary?.summary}
+                </div>
               </TabPanel>
 
               <TabPanel key="sentiment" className="rounded-xl p-3">
@@ -139,9 +145,7 @@ function SummaryDetail({ summary }: { summary: CommentSummary }) {
                   {summary?.keyInsights.map((insight) => (
                     <li key={insight} className="flex items-start gap-3">
                       <Lightbulb className="w-5 h-5 text-amber-500 mt-1 flex-shrink-0" />
-                      <span className="text-gray-700 dark:text-white">
-                        {insight}
-                      </span>
+                      <span>{insight}</span>
                     </li>
                   ))}
                 </ul>
