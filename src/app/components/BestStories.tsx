@@ -9,6 +9,7 @@ import { LoadingSkeleton } from "./LoadingSkeleton";
 import { Modal } from "./Modal";
 import { Lightbulb } from "lucide-react";
 import { useScreenSize } from "@/hooks/useScreenSize";
+import { capitalizeString } from "@/utils/string";
 
 export function BestStories({ stories }: { stories: Story[] }) {
   const [selectedStory, setSelectedStory] = useState<Story | null>(null);
@@ -86,7 +87,10 @@ function SummaryDetail({ summary }: { summary: CommentSummary }) {
       <div>
         <div className="mt-6">
           <p className="text-lg font-bold">Summary</p>
-          <p className="mt-4">{summary?.summary}</p>
+          <p
+            className="mt-4"
+            dangerouslySetInnerHTML={{ __html: summary?.summary }}
+          />
         </div>
 
         <div className="border-b border-gray-300 mt-6" />
@@ -128,13 +132,16 @@ function SummaryDetail({ summary }: { summary: CommentSummary }) {
             <TabPanels className="mt-3">
               <TabPanel key="name" className="rounded-xl px-3">
                 <div className="h-[23.75rem] overflow-y-auto">
-                  {summary?.summary}
+                  <p
+                    className="mt-4"
+                    dangerouslySetInnerHTML={{ __html: summary?.summary }}
+                  />
                 </div>
               </TabPanel>
 
               <TabPanel key="sentiment" className="rounded-xl p-3">
                 <p className="text-lg font-bold">
-                  <span> {summary?.sentiment}</span>{" "}
+                  <span> {capitalizeString(summary?.sentiment)}</span>{" "}
                   <span className="text-2xl">{summary?.sentimentEmoji}</span>
                 </p>
                 <p className="mt-4">{summary?.justification}</p>
