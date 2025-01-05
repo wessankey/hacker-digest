@@ -35,7 +35,7 @@ export class SummaryService implements TSummaryService {
     comments: CommentItem[]
   ): Promise<CommentSummary> {
     const promptSource = readFileSync(
-      path.join(process.cwd(), "/src/prompts/comments.hbs"),
+      path.join(process.cwd(), "prompts/comments.hbs"),
       "utf8"
     );
 
