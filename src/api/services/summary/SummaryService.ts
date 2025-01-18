@@ -1,10 +1,10 @@
 import { anthropic } from "@ai-sdk/anthropic";
 import { generateObject } from "ai";
-import { promises as fs } from "fs";
 import Handlebars from "handlebars";
 import { decode } from "html-entities";
 import { createSummary, getSummary } from "../cache";
 import { CommentItem, Story } from "../hackernews/types";
+import { prompt as promptSource } from "./prompt";
 import {
   CommentSummary,
   commentSummarySchema,
@@ -33,11 +33,6 @@ export class SummaryService implements TSummaryService {
     title: string,
     comments: CommentItem[]
   ): Promise<CommentSummary> {
-    const promptSource = await fs.readFile(
-      process.cwd() + "/src/app/comments.hbs",
-      "utf8"
-    );
-
     const parsedComments = comments.map((comment) => ({
       by: comment.by,
       text: decode(comment.text),
