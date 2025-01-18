@@ -7,7 +7,7 @@ export default async function Home() {
   const stories = await provider.getBestStories();
 
   const fileContent = await fs.readFile(
-    process.cwd() + "/app/comments.hbs",
+    process.cwd() + "/src/app/comments.hbs",
     "utf8"
   );
   console.log(fileContent);
