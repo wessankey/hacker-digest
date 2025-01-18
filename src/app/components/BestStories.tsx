@@ -19,6 +19,7 @@ export function BestStories({ stories }: { stories: Story[] }) {
   const handleSelectStory = async (story: Story) => {
     setSelectedStory(story);
     setLoading(true);
+    console.log("LOG:handleSelectStory");
     const result = await fetchCommentSummary(story);
     setSummary(result);
     setLoading(false);

@@ -11,7 +11,6 @@ import {
   commentSummarySchema,
   TSummaryService,
 } from "./schema";
-import { readdir } from "node:fs/promises";
 
 Handlebars.registerHelper({
   json: function (context) {
@@ -35,15 +34,8 @@ export class SummaryService implements TSummaryService {
     title: string,
     comments: CommentItem[]
   ): Promise<CommentSummary> {
-    try {
-      const files = await readdir("./");
-      for (const file of files) console.error(file);
-    } catch (err) {
-      console.error(err);
-    }
-
     const promptSource = await fs.readFile(
-      path.join(process.cwd(), "/src/app/prompts/comments.hbs"),
+      path.join(process.cwd(), `/public/comments.hbs`),
       "utf8"
     );
 
