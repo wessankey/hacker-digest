@@ -1,14 +1,15 @@
 import { createProvider } from "@/api/services/hackernews";
 import { BestStories } from "./components/BestStories";
 import { promises as fs } from "fs";
-import path from "path";
 
 export default async function Home() {
   const provider = createProvider();
   const stories = await provider.getBestStories();
 
-  const filePath = path.join(process.cwd(), "comments.hbs");
-  const fileContent = await fs.readFile(filePath, "utf8");
+  const fileContent = await fs.readFile(
+    process.cwd() + "/app/comments.hbs",
+    "utf8"
+  );
   console.log(fileContent);
 
   return (
