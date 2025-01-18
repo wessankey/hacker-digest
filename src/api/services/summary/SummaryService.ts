@@ -3,7 +3,6 @@ import { generateObject } from "ai";
 import { promises as fs } from "fs";
 import Handlebars from "handlebars";
 import { decode } from "html-entities";
-import path from "path";
 import { createSummary, getSummary } from "../cache";
 import { CommentItem, Story } from "../hackernews/types";
 import {
