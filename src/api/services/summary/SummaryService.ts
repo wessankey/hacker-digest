@@ -11,6 +11,9 @@ import {
   TSummaryService,
 } from "./schema";
 
+export const maxDuration = 30;
+export const dynamic = "force-dynamic";
+
 Handlebars.registerHelper({
   json: function (context) {
     return JSON.stringify(context, null, 2);
