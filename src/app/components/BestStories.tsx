@@ -11,9 +11,6 @@ import { useState } from "react";
 import { LoadingSkeleton } from "./LoadingSkeleton";
 import { Modal } from "./Modal";
 
-export const maxDuration = 30;
-export const dynamic = "force-dynamic";
-
 export function BestStories({ stories }: { stories: Story[] }) {
   const [selectedStory, setSelectedStory] = useState<Story | null>(null);
   const [loading, setLoading] = useState(false);

@@ -1,6 +1,9 @@
 import { createProvider } from "@/api/services/hackernews";
 import { BestStories } from "./components/BestStories";
 
+export const maxDuration = 30;
+export const dynamic = "force-dynamic";
+
 export default async function Home() {
   const provider = createProvider();
   const stories = await provider.getBestStories();
