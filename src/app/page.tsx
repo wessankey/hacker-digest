@@ -1,16 +1,9 @@
 import { createProvider } from "@/api/services/hackernews";
 import { BestStories } from "./components/BestStories";
-// import { promises as fs } from "fs";
 
 export default async function Home() {
   const provider = createProvider();
   const stories = await provider.getBestStories();
-
-  // const fileContent = await fs.readFile(
-  //   process.cwd() + "/src/app/comments.hbs",
-  //   "utf8"
-  // );
-  // console.log(fileContent);
 
   return (
     <div className="px-12 py-2 max-w-[1100px] mx-auto dark:text-white">
