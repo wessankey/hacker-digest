@@ -11,7 +11,7 @@ import {
   commentSummarySchema,
   TSummaryService,
 } from "./schema";
-
+import fs from "fs";
 Handlebars.registerHelper({
   json: function (context) {
     return JSON.stringify(context, null, 2);
@@ -34,6 +34,12 @@ export class SummaryService implements TSummaryService {
     title: string,
     comments: CommentItem[]
   ): Promise<CommentSummary> {
+    // log current working directory
+    console.log("LOG:cwd:", process.cwd());
+
+    // log files in cwd
+    console.log("LOG:files:", fs.readdirSync(process.cwd()));
+
     const promptSource = readFileSync(
       path.join(process.cwd(), "prompts/comments.hbs"),
       "utf8"
