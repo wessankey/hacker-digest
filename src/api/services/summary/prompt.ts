@@ -18,7 +18,7 @@ Below are the comments associated with this story. Comments are structured as a 
 
 Please analyze these comments and provide an analysis as a JSON object with the following fields:
 - \`summary\` - string: A general summary of the discussion, focusing on the main themes and points of agreement or disagreement among commenters. This should be formatted as HTML with line breaks, paragraphs, and other formatting.
-- \`keyInsights\` - array of strings: An array of 3-5 strings highlighting key insights or notable opinions expressed in the comments. These should represent the most interesting or impactful points made by commenters.
+- \`keyInsights\` - array of strings: An array of 3-5 strings highlighting key insights or notable opinions expressed in the comments. These should represent the most interesting or impactful points made by commenters. This field is absolutely required.
 - \`sentiment\` - string: An overall sentiment analysis of the comments, categorizing them as either positive, negative, or neutral. Consider the tone, language, and content of the comments when making this determination. This should be 1-3 words not separated by dashes.
 - \`sentimentEmoji\` - string: A single emoji representing the sentiment of the comments.
 - \`justification\` - string: A brief explanation of why you chose this sentiment, citing specific examples from the comments.
