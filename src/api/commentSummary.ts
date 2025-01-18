@@ -4,6 +4,9 @@ import { createProvider } from "./services/hackernews";
 import { Story } from "./services/hackernews/types";
 import { createSummaryService } from "./services/summary";
 
+export const maxDuration = 30;
+export const dynamic = "force-dynamic";
+
 export async function fetchCommentSummary(story: Story) {
   console.log("LOG:fetchCommentSummary");
   const provider = createProvider();
