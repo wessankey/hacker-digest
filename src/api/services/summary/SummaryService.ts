@@ -11,7 +11,7 @@ import {
   TSummaryService,
 } from "./schema";
 
-export const maxDuration = 30;
+export const maxDuration = 5;
 export const dynamic = "force-dynamic";
 
 Handlebars.registerHelper({
