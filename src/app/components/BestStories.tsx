@@ -6,7 +6,14 @@ import { CommentSummary } from "@/api/services/summary/schema";
 import { useScreenSize } from "@/hooks/useScreenSize";
 import { capitalizeString } from "@/utils/string";
 import { Tab, TabGroup, TabList, TabPanel, TabPanels } from "@headlessui/react";
-import { Lightbulb, CircleAlert, RefreshCcw } from "lucide-react";
+import {
+  CircleAlert,
+  Lightbulb,
+  RefreshCcw,
+  SquareArrowOutUpRight,
+  FileText,
+  MessageCircle,
+} from "lucide-react";
 import { useState } from "react";
 import { LoadingSkeleton } from "./LoadingSkeleton";
 import { Modal } from "./Modal";
@@ -31,6 +38,12 @@ export function BestStories({ stories }: { stories: Story[] }) {
     }
   };
 
+  const handleClose = () => {
+    setSelectedStory(null);
+    setSummary(null);
+    setError(false);
+  };
+
   return (
     <div className="my-10 grid lg:grid-cols-4 gap-x-12 gap-y-4 lg:max-w-[850px] md:grid-cols-2 md:max-w-[600px] max-w-full grid-cols-1">
       {stories.map((story) => {
@@ -44,37 +57,79 @@ export function BestStories({ stories }: { stories: Story[] }) {
       })}
 
       {selectedStory && (
-        <Modal isOpen={!!selectedStory} onClose={() => setSelectedStory(null)}>
+        <Modal isOpen={!!selectedStory} onClose={handleClose}>
+          {summary && (
+            <SummaryBody
+              summary={summary}
+              selectedStory={selectedStory}
+              setSelectedStory={setSelectedStory}
+            />
+          )}
+
           {error && (
             <ErrorMessage
               onRetry={() => handleSelectStory(selectedStory)}
-              onClose={() => setSelectedStory(null)}
+              onClose={handleClose}
             />
           )}
-          <div className="flex flex-col items-start md:h-full justify-between">
-            <div className="w-full">
-              {summary && (
-                <h3 className="text-2xl font-bold">{selectedStory.title}</h3>
-              )}
-              {loading && (
-                <div className="mt-6">
-                  <LoadingSkeleton />
-                </div>
-              )}
-              {!loading && summary && <SummaryDetail summary={summary} />}
-            </div>
 
-            {summary && (
-              <button
-                className="mt-6 dark:bg-indigo-600 bg-indigo-300 hover:bg-indigo-400  dark:hover:bg-indigo-700 dark:text-white text-gray-700 px-4 py-2 rounded-md font-bold"
-                onClick={() => setSelectedStory(null)}
-              >
-                Close
-              </button>
-            )}
-          </div>
+          {loading && (
+            <div className="mt-6">
+              <LoadingSkeleton />
+            </div>
+          )}
         </Modal>
       )}
+    </div>
+  );
+}
+
+function SummaryBody({
+  summary,
+  selectedStory,
+  setSelectedStory,
+}: {
+  summary: CommentSummary;
+  selectedStory: Story;
+  setSelectedStory: (story: Story | null) => void;
+}) {
+  return (
+    <div className="flex flex-col items-start justify-between md:h-[34rem]">
+      <h3 className="text-2xl font-bold">{selectedStory.title}</h3>
+
+      <div className="flex-shrink flex-grow overflow-y-auto">
+        <div className="flex gap-10">
+          <a
+            href={selectedStory.url}
+            target="_blank"
+            className="text-sm text-indigo-600 hover:text-indigo-700 dark:text-indigo-400 dark:hover:text-indigo-500 pt-3 flex items-center gap-1"
+          >
+            <FileText className="w-4 h-4 inline-block" />
+            <span>View original article</span>
+            <SquareArrowOutUpRight className="w-3 h-3 inline-block" />
+          </a>
+
+          <a
+            href={selectedStory.url}
+            target="_blank"
+            className="text-sm text-indigo-600 hover:text-indigo-700 dark:text-indigo-400 dark:hover:text-indigo-500 pt-3 flex items-center gap-1"
+          >
+            <MessageCircle className="w-4 h-4 inline-block" />
+            <span>View original discussion</span>
+            <SquareArrowOutUpRight className="w-3 h-3 inline-block" />
+          </a>
+        </div>
+        <SummaryDetail summary={summary} />
+      </div>
+
+      <div className="w-full flex-shrink-0">
+        <button
+          className="mt-8 dark:bg-indigo-600 bg-indigo-300 hover:bg-indigo-400  dark:hover:bg-indigo-700 dark:text-white text-gray-700 px-4 py-2 rounded-md font-bold"
+          onClick={() => setSelectedStory(null)}
+        >
+          Close
+        </button>
+      </div>
     </div>
   );
 }
@@ -107,14 +162,14 @@ function ErrorMessage({
         </button>
 
         <button
-          className="bg-gray-700 hover:bg-gray-600 rounded-md px-4 py-2 font-bold transition-colors"
+          className="bg-gray-300 dark:bg-gray-700 dark:hover:bg-gray-600 hover:bg-gray-400 rounded-md px-4 py-2 font-bold transition-colors"
           onClick={onClose}
         >
           Close
         </button>
       </div>
 
-      <p className="mt-4 text-sm text-gray-400">
+      <p className="mt-4 text-sm dark:text-gray-400 text-gray-700">
         If the problem persists, please try again later.
       </p>
     </div>
@@ -156,11 +211,11 @@ function SummaryDetail({ summary }: { summary: CommentSummary }) {
   }
 
   return (
-    <div className="mt-6 ">
+    <div className="pt-4">
       <div className="flex w-full justify-center h-full ">
-        <div className="w-full ">
+        <div className="w-ful">
           <TabGroup>
-            <TabList className="flex gap-4">
+            <TabList className="flex gap-4 border-t border-b py-3 border-gray-300 dark:border-gray-700">
               <SummaryDetailTab label="Summary" />
               <SummaryDetailTab label="Sentiment" />
               <SummaryDetailTab label="Key Insights" />
@@ -193,7 +248,7 @@ function Summary({ summary }: { summary: CommentSummary }) {
     <div className="mt-6 overflow-y-auto md:h-[23.75rem] md:mt-3">
       {isMobile && <p className="text-lg font-bold">Summary</p>}
       <p
-        className="mt-4"
+        className="mt-1"
         dangerouslySetInnerHTML={{ __html: summary?.summary }}
       />
     </div>
