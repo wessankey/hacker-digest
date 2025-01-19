@@ -2,7 +2,7 @@ import { CommentItem, Story } from "@/api/services/hackernews/types";
 import { z } from "zod";
 
 export const commentSummarySchema = z.object({
-  summary: z.string(),
+  summary: z.array(z.string()),
   keyInsights: z.array(z.string()),
   sentiment: z.string(),
   sentimentEmoji: z.string(),

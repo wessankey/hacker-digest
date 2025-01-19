@@ -94,7 +94,7 @@ function SummaryBody({
   setSelectedStory: (story: Story | null) => void;
 }) {
   return (
-    <div className="flex flex-col items-start justify-between md:h-[34rem]">
+    <div className="flex flex-col items-start justify-between md:h-[35.5rem]">
       <h3 className="text-2xl font-bold">{selectedStory.title}</h3>
 
       <div className="flex-shrink flex-grow overflow-y-auto">
@@ -124,7 +124,7 @@ function SummaryBody({
 
       <div className="w-full flex-shrink-0">
         <button
-          className="mt-8 dark:bg-indigo-600 bg-indigo-300 hover:bg-indigo-400  dark:hover:bg-indigo-700 dark:text-white text-gray-700 px-4 py-2 rounded-md font-bold"
+          className="mt-4 dark:bg-indigo-600 bg-indigo-300 hover:bg-indigo-400  dark:hover:bg-indigo-700 dark:text-white text-gray-700 px-4 py-2 rounded-md font-bold"
           onClick={() => setSelectedStory(null)}
         >
           Close
@@ -245,12 +245,13 @@ function Summary({ summary }: { summary: CommentSummary }) {
   const isMobile = screenSize === "xs" || screenSize === "sm";
 
   return (
-    <div className="mt-6 overflow-y-auto md:h-[23.75rem] md:mt-3">
+    <div className="mt-6 md:h-[23.75rem] md:mt-3">
       {isMobile && <p className="text-lg font-bold">Summary</p>}
-      <p
-        className="mt-1"
-        dangerouslySetInnerHTML={{ __html: summary?.summary }}
-      />
+      {summary?.summary.map((paragraph, index) => (
+        <p key={index} className="mb-4">
+          {paragraph}
+        </p>
+      ))}
     </div>
   );
 }
