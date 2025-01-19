@@ -10,10 +10,12 @@ export default async function Home() {
 
   return (
     <div className="px-12 py-2 max-w-[1100px] mx-auto dark:text-white">
-      <h1 className="text-5xl font-bold">HackerDigest ⚡️📰</h1>
-      <h2 className="text-xl mt-6">
-        AI summaries of the top Hacker News story comments
-      </h2>
+      <div className="flex flex-col items-center justify-center">
+        <h1 className="text-5xl font-bold">HackerDigest ⚡️📰</h1>
+        <h2 className="text-xl mt-6">
+          AI summaries of the top Hacker News story comments
+        </h2>
+      </div>
       <div className="flex justify-center">
         <BestStories stories={stories} />
       </div>
