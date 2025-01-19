@@ -10,7 +10,9 @@ if (alreadyCreatedAps.length === 0) {
     credential: cert({
       clientEmail: process.env.FIREBASE_CLIENT_EMAIL,
       privateKey: process.env.FIREBASE_PRIVATE_KEY
-        ? JSON.parse(process.env.FIREBASE_PRIVATE_KEY)
+        ? process.env.FIREBASE_PRIVATE_KEY.includes('"')
+          ? JSON.parse(process.env.FIREBASE_PRIVATE_KEY)
+          : process.env.FIREBASE_PRIVATE_KEY
         : undefined,
       projectId: process.env.FIREBASE_PROJECT_ID,
     }),

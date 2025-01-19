@@ -15,10 +15,10 @@ export type TSummaryService = {
   getSummary: (
     story: Story,
     comments: CommentItem[]
-  ) => Promise<CommentSummary>;
+  ) => Promise<CommentSummary | undefined>;
   getCachedSummary: (storyId: number) => Promise<CommentSummary | undefined>;
   summarizeComments: (
     title: string,
     comments: CommentItem[]
-  ) => Promise<CommentSummary>;
+  ) => Promise<CommentSummary | undefined>;
 };

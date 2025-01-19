@@ -20,8 +20,10 @@ Handlebars.registerHelper({
 export class SummaryService implements TSummaryService {
   async getSummary(story: Story, comments: CommentItem[]) {
     const summary = await this.summarizeComments(story.title, comments);
-    await createSummary(story.id, summary);
-    return summary;
+    if (summary) {
+      await createSummary(story.id, summary);
+      return summary;
+    }
   }
 
   async getCachedSummary(storyId: number): Promise<CommentSummary | undefined> {
@@ -32,7 +34,7 @@ export class SummaryService implements TSummaryService {
   async summarizeComments(
     title: string,
     comments: CommentItem[]
-  ): Promise<CommentSummary> {
+  ): Promise<CommentSummary | undefined> {
     const parsedComments = comments.map((comment) => ({
       by: comment.by,
       text: decode(comment.text),
@@ -45,14 +47,21 @@ export class SummaryService implements TSummaryService {
       comments: parsedComments,
     });
 
-    const { object } = await generateObject({
-      model: anthropic("claude-3-5-sonnet-latest"),
-      system:
-        "You are a helpful assistant that summarizes comments from a Hacker News story.",
-      prompt: prompt,
-      schema: commentSummarySchema,
-    });
+    try {
+      const { object } = await generateObject({
+        model: anthropic("claude-3-5-sonnet-latest"),
+        system:
+          "You are a helpful assistant that summarizes comments from a Hacker News story.",
+        prompt: prompt,
+        schema: commentSummarySchema,
+      });
 
-    return object;
+      return object;
+    } catch (error) {
+      if (error instanceof Error) {
+        console.error("Error generating summary:", error.message);
+      }
+    }
+    return undefined;
   }
 }

@@ -6,7 +6,7 @@ import { CommentSummary } from "@/api/services/summary/schema";
 import { useScreenSize } from "@/hooks/useScreenSize";
 import { capitalizeString } from "@/utils/string";
 import { Tab, TabGroup, TabList, TabPanel, TabPanels } from "@headlessui/react";
-import { Lightbulb } from "lucide-react";
+import { Lightbulb, CircleAlert, RefreshCcw } from "lucide-react";
 import { useState } from "react";
 import { LoadingSkeleton } from "./LoadingSkeleton";
 import { Modal } from "./Modal";
@@ -15,14 +15,20 @@ export function BestStories({ stories }: { stories: Story[] }) {
   const [selectedStory, setSelectedStory] = useState<Story | null>(null);
   const [loading, setLoading] = useState(false);
   const [summary, setSummary] = useState<CommentSummary | null>(null);
+  const [error, setError] = useState(false);
 
   const handleSelectStory = async (story: Story) => {
+    setError(false);
     setSelectedStory(story);
     setLoading(true);
-    console.log("LOG:handleSelectStory");
     const result = await fetchCommentSummary(story);
-    setSummary(result);
     setLoading(false);
+    if (!result) {
+      setSummary(null);
+      setError(true);
+    } else {
+      setSummary(result);
+    }
   };
 
   return (
@@ -39,9 +45,17 @@ export function BestStories({ stories }: { stories: Story[] }) {
 
       {selectedStory && (
         <Modal isOpen={!!selectedStory} onClose={() => setSelectedStory(null)}>
+          {error && (
+            <ErrorMessage
+              onRetry={() => handleSelectStory(selectedStory)}
+              onClose={() => setSelectedStory(null)}
+            />
+          )}
           <div className="flex flex-col items-start md:h-full justify-between">
             <div className="w-full">
-              <h3 className="text-2xl font-bold">{selectedStory.title}</h3>
+              {summary && (
+                <h3 className="text-2xl font-bold">{selectedStory.title}</h3>
+              )}
               {loading && (
                 <div className="mt-6">
                   <LoadingSkeleton />
@@ -50,15 +64,59 @@ export function BestStories({ stories }: { stories: Story[] }) {
               {!loading && summary && <SummaryDetail summary={summary} />}
             </div>
 
-            <button
-              className="mt-6 dark:bg-indigo-600 bg-indigo-300 hover:bg-indigo-400  dark:hover:bg-indigo-700 dark:text-white text-gray-700 px-4 py-2 rounded-md font-bold"
-              onClick={() => setSelectedStory(null)}
-            >
-              Close
-            </button>
+            {summary && (
+              <button
+                className="mt-6 dark:bg-indigo-600 bg-indigo-300 hover:bg-indigo-400  dark:hover:bg-indigo-700 dark:text-white text-gray-700 px-4 py-2 rounded-md font-bold"
+                onClick={() => setSelectedStory(null)}
+              >
+                Close
+              </button>
+            )}
           </div>
         </Modal>
       )}
+    </div>
+  );
+}
+
+function ErrorMessage({
+  onRetry,
+  onClose,
+}: {
+  onRetry: () => void;
+  onClose: () => void;
+}) {
+  return (
+    <div className="flex flex-col items-center h-full rounded-md p-4 mt-20">
+      <CircleAlert className="w-10 h-10 text-red-500" />
+      <h3 className="text-2xl font-bold text-red-500 mt-4">
+        Unable to Generate Summary
+      </h3>
+      <p className="text-center mt-4">
+        We encountered an error while generating the summary. This might be due
+        to temprary issues or high server load.
+      </p>
+
+      <div className="flex gap-4 mt-6">
+        <button
+          className="dark:bg-indigo-600 bg-indigo-300 hover:bg-indigo-400  dark:hover:bg-indigo-700 dark:text-white text-gray-700 px-4 py-2 rounded-md font-bold flex items-center gap-2"
+          onClick={onRetry}
+        >
+          <RefreshCcw className="w-5 h-5" />
+          <span>Try Again</span>
+        </button>
+
+        <button
+          className="bg-gray-700 hover:bg-gray-600 rounded-md px-4 py-2 font-bold transition-colors"
+          onClick={onClose}
+        >
+          Close
+        </button>
+      </div>
+
+      <p className="mt-4 text-sm text-gray-400">
+        If the problem persists, please try again later.
+      </p>
     </div>
   );
 }
