@@ -110,7 +110,7 @@ function SummaryBody({
           </a>
 
           <a
-            href={selectedStory.url}
+            href={`https://news.ycombinator.com/item?id=${selectedStory.id}`}
             target="_blank"
             className="text-sm text-indigo-600 hover:text-indigo-700 dark:text-indigo-400 dark:hover:text-indigo-500 pt-3 flex items-center gap-1"
           >
