@@ -2,6 +2,7 @@ import { createProvider } from "@/api/services/hackernews";
 import { Story } from "@/api/services/hackernews/types";
 import { createSummaryService } from "@/api/services/summary";
 
+export const maxDuration = 60;
 export const dynamic = "force-dynamic";
 
 const STORY_CHUNK_SIZE = 4;
