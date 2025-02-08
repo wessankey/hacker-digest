@@ -1,7 +1,10 @@
 "use client";
 
 import { Story } from "@/api/services/hackernews/types";
-import { CommentSummary } from "@/api/services/summary/schema";
+import {
+  CommentSummary,
+  commentSummarySchema,
+} from "@/api/services/summary/schema";
 import { useScreenSize } from "@/hooks/useScreenSize";
 import { capitalizeString } from "@/utils/string";
 import { Tab, TabGroup, TabList, TabPanel, TabPanels } from "@headlessui/react";
@@ -16,38 +19,23 @@ import {
 import { useState } from "react";
 import { LoadingSkeleton } from "./LoadingSkeleton";
 import { Modal } from "./Modal";
+import { experimental_useObject as useObject } from "ai/react";
 
 export function BestStories({ stories }: { stories: Story[] }) {
   const [selectedStory, setSelectedStory] = useState<Story | null>(null);
-  const [loading, setLoading] = useState(false);
-  const [summary, setSummary] = useState<CommentSummary | null>(null);
-  const [error, setError] = useState(false);
+
+  const { object, submit, isLoading, error } = useObject({
+    api: "/api/summary",
+    schema: commentSummarySchema,
+  });
 
   const handleSelectStory = async (story: Story) => {
-    setError(false);
     setSelectedStory(story);
-    setLoading(true);
-
-    const response = await fetch("/api/summary", {
-      method: "POST",
-      body: JSON.stringify({ story }),
-    });
-    const result = await response.json();
-
-    setLoading(false);
-
-    if (!result) {
-      setSummary(null);
-      setError(true);
-    } else {
-      setSummary(result);
-    }
+    submit({ story });
   };
 
   const handleClose = () => {
     setSelectedStory(null);
-    setSummary(null);
-    setError(false);
   };
 
   return (
@@ -64,9 +52,9 @@ export function BestStories({ stories }: { stories: Story[] }) {
 
       {selectedStory && (
         <Modal isOpen={!!selectedStory} onClose={handleClose}>
-          {summary && (
+          {object && (
             <SummaryBody
-              summary={summary}
+              summary={object}
               selectedStory={selectedStory}
               setSelectedStory={setSelectedStory}
             />
@@ -79,7 +67,7 @@ export function BestStories({ stories }: { stories: Story[] }) {
             />
           )}
 
-          {loading && (
+          {isLoading && (
             <div className="mt-6">
               <LoadingSkeleton />
             </div>
@@ -95,7 +83,7 @@ function SummaryBody({
   selectedStory,
   setSelectedStory,
 }: {
-  summary: CommentSummary;
+  summary: Partial<CommentSummary>;
   selectedStory: Story;
   setSelectedStory: (story: Story | null) => void;
 }) {
@@ -103,8 +91,8 @@ function SummaryBody({
     <div className="flex flex-col items-start justify-between md:h-[31rem">
       <h3 className="text-2xl font-bold">{selectedStory.title}</h3>
 
-      <div className="flex-shrink flex-grow">
-        <div className="flex gap-10">
+      <div className="flex-shrink flex-grow w-full">
+        <div className="flex gap-10 ">
           <a
             href={selectedStory.url}
             target="_blank"
@@ -131,7 +119,7 @@ function SummaryBody({
 
       <div className="w-full flex-shrink-0 border-t border-gray-300 dark:border-gray-700 mt-4">
         <button
-          className="mt-3 dark:bg-indigo-600 bg-indigo-300 hover:bg-indigo-400  dark:hover:bg-indigo-700 dark:text-white text-gray-700 px-4 py-2 rounded-md font-bold"
+          className="mt-5 dark:bg-indigo-600 bg-indigo-300 hover:bg-indigo-400  dark:hover:bg-indigo-700 dark:text-white text-gray-700 px-4 py-2 rounded-md font-bold"
           onClick={() => setSelectedStory(null)}
         >
           Close
@@ -200,7 +188,7 @@ function StoryTile({
   );
 }
 
-function SummaryDetail({ summary }: { summary: CommentSummary }) {
+function SummaryDetail({ summary }: { summary: Partial<CommentSummary> }) {
   const screenSize = useScreenSize();
 
   if (screenSize === "xs" || screenSize === "sm") {
@@ -218,16 +206,16 @@ function SummaryDetail({ summary }: { summary: CommentSummary }) {
   }
 
   return (
-    <div className="pt-4">
+    <div className="pt-4 w-full">
       <div className="flex w-full justify-center h-full ">
-        <div className="w-ful">
+        <div className="w-full">
           <TabGroup>
-            <TabList className="flex gap-4 border-t border-b py-3 border-gray-300 dark:border-gray-700">
+            <TabList className="flex gap-4 w-full border-t border-b py-3 border-gray-300 dark:border-gray-700">
               <SummaryDetailTab label="Summary" />
               <SummaryDetailTab label="Sentiment" />
               <SummaryDetailTab label="Key Insights" />
             </TabList>
-            <TabPanels className="mt-3 md:h-[19.5rem] overflow-y-auto">
+            <TabPanels className="md:h-[19.5rem] overflow-y-auto">
               <TabPanel key="name" className="rounded-xl px-3">
                 <Summary summary={summary} />
               </TabPanel>
@@ -247,14 +235,14 @@ function SummaryDetail({ summary }: { summary: CommentSummary }) {
   );
 }
 
-function Summary({ summary }: { summary: CommentSummary }) {
+function Summary({ summary }: { summary: Partial<CommentSummary> }) {
   const screenSize = useScreenSize();
   const isMobile = screenSize === "xs" || screenSize === "sm";
 
   return (
-    <div className="mt-6 md:h-[23.75rem] md:mt-3">
+    <div className="mt-6  md:mt-3">
       {isMobile && <p className="text-lg font-bold">Summary</p>}
-      {summary?.summary.map((paragraph, index) => (
+      {summary?.summary?.map((paragraph, index) => (
         <p key={index} className="mb-4">
           {paragraph}
         </p>
@@ -263,11 +251,11 @@ function Summary({ summary }: { summary: CommentSummary }) {
   );
 }
 
-function Sentiment({ summary }: { summary: CommentSummary }) {
+function Sentiment({ summary }: { summary: Partial<CommentSummary> }) {
   return (
-    <div className="mt-6 md:mt-0">
+    <div className="mt-6 md:mt-3">
       <p className="text-lg font-bold">
-        <span> {capitalizeString(summary?.sentiment)}</span>{" "}
+        <span> {capitalizeString(summary?.sentiment ?? "")}</span>{" "}
         <span className="text-2xl">{summary?.sentimentEmoji}</span>
       </p>
       <p className="mt-4">{summary?.justification}</p>
@@ -275,11 +263,11 @@ function Sentiment({ summary }: { summary: CommentSummary }) {
   );
 }
 
-function KeyInsights({ summary }: { summary: CommentSummary }) {
+function KeyInsights({ summary }: { summary: Partial<CommentSummary> }) {
   return (
-    <div className="mt-6 md:mt-0">
+    <div className="mt-6 md:mt-3">
       <ul className="list-none list-inside space-y-4">
-        {summary?.keyInsights.map((insight) => (
+        {summary?.keyInsights?.map((insight) => (
           <li key={insight} className="flex items-start gap-3">
             <Lightbulb className="w-5 h-5 text-amber-500 mt-1 flex-shrink-0" />
             <span>{insight}</span>

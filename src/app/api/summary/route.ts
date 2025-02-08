@@ -1,10 +1,10 @@
 import { createProvider } from "@/api/services/hackernews";
 import { prompt as promptSource } from "@/api/services/summary/prompt";
 import { commentSummarySchema } from "@/api/services/summary/schema";
-import { anthropic } from "@ai-sdk/anthropic";
-import { generateObject } from "ai";
+// import { anthropic } from "@ai-sdk/anthropic";
+import { streamObject } from "ai";
 import Handlebars from "handlebars";
-import { NextResponse } from "next/server";
+import { ollama } from "ollama-ai-provider";
 
 Handlebars.registerHelper({
   json: function (context) {
@@ -29,13 +29,14 @@ export async function POST(req: Request) {
     comments: parsedComments,
   });
 
-  const { object } = await generateObject({
-    model: anthropic("claude-3-5-sonnet-latest"),
+  const result = streamObject({
+    // model: anthropic("claude-3-5-sonnet-latest"),
+    model: ollama("llama3.2"),
     system:
       "You are a helpful assistant that summarizes comments from a Hacker News story.",
     prompt: prompt,
     schema: commentSummarySchema,
   });
 
-  return NextResponse.json(object);
+  return result.toTextStreamResponse();
 }
