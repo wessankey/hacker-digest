@@ -1,9 +1,9 @@
 import { anthropic } from "@ai-sdk/anthropic";
 import { generateObject } from "ai";
 import Handlebars from "handlebars";
-import { decode } from "html-entities";
+
 import { createSummary, getSummary } from "../cache";
-import { CommentItem, Story } from "../hackernews/types";
+import { TCommentItem, Story } from "../hackernews/types";
 import { prompt as promptSource } from "./prompt";
 import {
   CommentSummary,
@@ -18,7 +18,7 @@ Handlebars.registerHelper({
 });
 
 export class SummaryService implements TSummaryService {
-  async getSummary(story: Story, comments: CommentItem[]) {
+  async getSummary(story: Story, comments: TCommentItem[]) {
     const summary = await this.summarizeComments(story.title, comments);
     if (summary) {
       await createSummary(story.id, summary);
@@ -33,12 +33,11 @@ export class SummaryService implements TSummaryService {
 
   async summarizeComments(
     title: string,
-    comments: CommentItem[]
+    comments: TCommentItem[]
   ): Promise<CommentSummary | undefined> {
     const parsedComments = comments.map((comment) => ({
       by: comment.by,
-      text: decode(comment.text),
-      time: comment.time,
+      text: comment.text,
     }));
 
     const promptTemplate = Handlebars.compile(promptSource);

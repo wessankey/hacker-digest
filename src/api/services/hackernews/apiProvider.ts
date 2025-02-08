@@ -1,12 +1,15 @@
 import { z } from "zod";
 import {
   BestStoriesSchema,
-  CommentItem,
+  TCommentItem,
   CommentItemSchema,
   HackerNewsProvider,
   Story,
   StorySchema,
 } from "./types";
+import { decode } from "html-entities";
+
+const MAX_COMMENTS = 100;
 
 export class HackerNewsAPIProvider implements HackerNewsProvider {
   private readonly baseUrl = "https://hacker-news.firebaseio.com/v0/";
@@ -27,7 +30,7 @@ export class HackerNewsAPIProvider implements HackerNewsProvider {
     return bestStories;
   }
 
-  async getComments(story: Story): Promise<CommentItem[]> {
+  async getComments(story: Story): Promise<TCommentItem[]> {
     const commentDetailRequests = story.kids.map((childId) =>
       fetch(`${this.baseUrl}/item/${childId}.json`)
     );
@@ -38,7 +41,13 @@ export class HackerNewsAPIProvider implements HackerNewsProvider {
 
     const commentDetailsParsed = z
       .array(CommentItemSchema)
-      .parse(commentDetailsJson);
+      .parse(commentDetailsJson)
+      .filter((comment) => !comment.dead && !comment.deleted)
+      .slice(0, MAX_COMMENTS)
+      .map((comment) => ({
+        text: decode(comment.text),
+        by: comment.by,
+      }));
 
     return commentDetailsParsed;
   }

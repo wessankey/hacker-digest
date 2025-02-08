@@ -28,9 +28,13 @@ export const CommentItemSchema = z.object({
   dead: z.boolean().optional(),
 });
 
-export type CommentItem = z.infer<typeof CommentItemSchema>;
+export type TCommentItemSchema = z.infer<typeof CommentItemSchema>;
+
+export type TCommentItem = Pick<TCommentItemSchema, "by" | "text"> & {
+  nestedComments?: Omit<TCommentItem, "nestedComments">;
+};
 
 export interface HackerNewsProvider {
   getBestStories: () => Promise<Story[]>;
-  getComments: (story: Story) => Promise<CommentItem[]>;
+  getComments: (story: Story) => Promise<TCommentItem[]>;
 }
