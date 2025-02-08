@@ -1,6 +1,5 @@
 "use client";
 
-import { fetchCommentSummary } from "@/api/commentSummary";
 import { Story } from "@/api/services/hackernews/types";
 import { CommentSummary } from "@/api/services/summary/schema";
 import { useScreenSize } from "@/hooks/useScreenSize";
@@ -28,8 +27,15 @@ export function BestStories({ stories }: { stories: Story[] }) {
     setError(false);
     setSelectedStory(story);
     setLoading(true);
-    const result = await fetchCommentSummary(story);
+
+    const response = await fetch("/api/summary", {
+      method: "POST",
+      body: JSON.stringify({ story }),
+    });
+    const result = await response.json();
+
     setLoading(false);
+
     if (!result) {
       setSummary(null);
       setError(true);
