@@ -30,8 +30,11 @@ export const CommentItemSchema = z.object({
 
 export type TCommentItemSchema = z.infer<typeof CommentItemSchema>;
 
-export type TCommentItem = Pick<TCommentItemSchema, "by" | "text"> & {
-  nestedComments?: Omit<TCommentItem, "nestedComments">;
+export type TCommentItem = Pick<
+  TCommentItemSchema,
+  "id" | "by" | "text" | "parent"
+> & {
+  nestedComments?: Omit<TCommentItem, "nestedComments">[];
 };
 
 export interface HackerNewsProvider {

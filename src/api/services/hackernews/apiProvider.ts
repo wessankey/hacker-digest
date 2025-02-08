@@ -1,13 +1,13 @@
+import { decode } from "html-entities";
 import { z } from "zod";
 import {
   BestStoriesSchema,
-  TCommentItem,
   CommentItemSchema,
   HackerNewsProvider,
   Story,
   StorySchema,
+  TCommentItem,
 } from "./types";
-import { decode } from "html-entities";
 
 const MAX_COMMENTS = 100;
 
@@ -42,11 +42,16 @@ export class HackerNewsAPIProvider implements HackerNewsProvider {
     const commentDetailsParsed = z
       .array(CommentItemSchema)
       .parse(commentDetailsJson)
-      .filter((comment) => !comment.dead && !comment.deleted)
+      .filter(
+        (comment) =>
+          !comment.dead && !comment.deleted && comment.type === "comment"
+      )
       .slice(0, MAX_COMMENTS)
       .map((comment) => ({
+        id: comment.id,
         text: decode(comment.text),
         by: comment.by,
+        parent: comment.parent,
       }));
 
     return commentDetailsParsed;
