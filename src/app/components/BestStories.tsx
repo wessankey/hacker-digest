@@ -94,10 +94,10 @@ function SummaryBody({
   setSelectedStory: (story: Story | null) => void;
 }) {
   return (
-    <div className="flex flex-col items-start justify-between md:h-[35.5rem]">
+    <div className="flex flex-col items-start justify-between md:h-[31rem">
       <h3 className="text-2xl font-bold">{selectedStory.title}</h3>
 
-      <div className="flex-shrink flex-grow overflow-y-auto">
+      <div className="flex-shrink flex-grow">
         <div className="flex gap-10">
           <a
             href={selectedStory.url}
@@ -119,12 +119,13 @@ function SummaryBody({
             <SquareArrowOutUpRight className="w-3 h-3 inline-block" />
           </a>
         </div>
+
         <SummaryDetail summary={summary} />
       </div>
 
-      <div className="w-full flex-shrink-0">
+      <div className="w-full flex-shrink-0 border-t border-gray-300 dark:border-gray-700 mt-4">
         <button
-          className="mt-4 dark:bg-indigo-600 bg-indigo-300 hover:bg-indigo-400  dark:hover:bg-indigo-700 dark:text-white text-gray-700 px-4 py-2 rounded-md font-bold"
+          className="mt-3 dark:bg-indigo-600 bg-indigo-300 hover:bg-indigo-400  dark:hover:bg-indigo-700 dark:text-white text-gray-700 px-4 py-2 rounded-md font-bold"
           onClick={() => setSelectedStory(null)}
         >
           Close
@@ -220,16 +221,16 @@ function SummaryDetail({ summary }: { summary: CommentSummary }) {
               <SummaryDetailTab label="Sentiment" />
               <SummaryDetailTab label="Key Insights" />
             </TabList>
-            <TabPanels className="mt-3">
+            <TabPanels className="mt-3 md:h-[19.5rem] overflow-y-auto">
               <TabPanel key="name" className="rounded-xl px-3">
                 <Summary summary={summary} />
               </TabPanel>
 
-              <TabPanel key="sentiment" className="rounded-xl p-3">
+              <TabPanel key="sentiment" className="rounded-xl px-3">
                 <Sentiment summary={summary} />
               </TabPanel>
 
-              <TabPanel key="insights" className="rounded-xl p-3">
+              <TabPanel key="insights" className="rounded-xl px-3">
                 <KeyInsights summary={summary} />
               </TabPanel>
             </TabPanels>
