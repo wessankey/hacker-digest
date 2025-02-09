@@ -12,8 +12,7 @@ export const commentSummary: CommentSummary = {
     "The announcement has sparked debate about the relationship between quantum computing and the multiverse theory, with many commenters questioning the scientific validity of connecting these concepts",
     "There are concerns about the implications for current cryptography systems, though some argue that the focus on cryptography breaking is overshadowing more meaningful potential applications in materials science and medicine",
   ],
-  sentiment: "mixed-skeptical",
-  sentimentEmoji: "🤨",
+  sentiment: "neutral",
   justification:
     "The sentiment is predominantly skeptical with mixed reactions because: 1) Multiple technical experts express doubt about Google's claims and methodology (e.g., GilKalai's detailed critique), 2) While some commenters acknowledge the technical achievement, especially regarding error correction, there's widespread skepticism about the practical implications and benchmark methodology, 3) Many comments question the multiverse theory connections and marketing language used in the announcement, 4) There are some positive comments about the technical achievement, but they're often tempered with caveats about practical applications.",
 };

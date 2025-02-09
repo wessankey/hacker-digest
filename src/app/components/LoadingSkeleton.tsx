@@ -74,14 +74,6 @@ export function LoadingSkeleton() {
       <div className="h-2.5 bg-gray-400 rounded-full dark:bg-gray-700 max-w-[490px] mb-3"></div>
       <div className="h-2.5 bg-gray-400 rounded-full dark:bg-gray-700 max-w-[400px] mb-3"></div>
       <div className="h-2.5 bg-gray-400 rounded-full dark:bg-gray-700 max-w-[450px] mb-3"></div>
-      <div className="h-2.5 bg-gray-400 rounded-full dark:bg-gray-700 max-w-[550px] mb-5"></div>
-
-      <div className="h-2.5 bg-gray-400 rounded-full dark:bg-gray-700 max-w-[550px] mb-3"></div>
-      <div className="h-2.5 bg-gray-400 rounded-full dark:bg-gray-700 max-w-[430px] mb-3"></div>
-      <div className="h-2.5 bg-gray-400 rounded-full dark:bg-gray-700 max-w-[490px] mb-3"></div>
-      <div className="h-2.5 bg-gray-400 rounded-full dark:bg-gray-700 max-w-[400px] mb-3"></div>
-      <div className="h-2.5 bg-gray-400 rounded-full dark:bg-gray-700 max-w-[450px] mb-3"></div>
-      <div className="h-2.5 bg-gray-400 rounded-full dark:bg-gray-700 max-w-[550px] mb-3"></div>
 
       <span className="sr-only">Loading...</span>
     </div>

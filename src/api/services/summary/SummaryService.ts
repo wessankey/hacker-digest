@@ -1,9 +1,8 @@
-import { anthropic } from "@ai-sdk/anthropic";
+import { openai } from "@ai-sdk/openai";
 import { generateObject } from "ai";
 import Handlebars from "handlebars";
-
 import { createSummary, getSummary } from "../cache";
-import { TCommentItem, Story } from "../hackernews/types";
+import { Story, TCommentItem } from "../hackernews/types";
 import { prompt as promptSource } from "./prompt";
 import {
   CommentSummary,
@@ -48,7 +47,8 @@ export class SummaryService implements TSummaryService {
 
     try {
       const { object } = await generateObject({
-        model: anthropic("claude-3-5-sonnet-latest"),
+        // @ts-expect-error - not sure why this is an issue
+        model: openai("gpt-4o-mini"),
         system:
           "You are a helpful assistant that summarizes comments from a Hacker News story.",
         prompt: prompt,
@@ -61,6 +61,7 @@ export class SummaryService implements TSummaryService {
         console.error("Error generating summary:", error.message);
       }
     }
+
     return undefined;
   }
 }
