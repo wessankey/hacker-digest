@@ -4,8 +4,7 @@ import { z } from "zod";
 export const commentSummarySchema = z.object({
   summary: z.array(z.string()),
   keyInsights: z.array(z.string()),
-  sentiment: z.string(),
-  sentimentEmoji: z.string(),
+  sentiment: z.enum(["positive", "negative", "neutral"]),
   justification: z.string(),
 });
 

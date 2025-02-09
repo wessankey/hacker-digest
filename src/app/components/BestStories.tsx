@@ -1,14 +1,9 @@
 "use client";
 
 import { Story } from "@/api/services/hackernews/types";
-import {
-  CommentSummary,
-  commentSummarySchema,
-} from "@/api/services/summary/schema";
+import { CommentSummary } from "@/api/services/summary/schema";
 import { useScreenSize } from "@/hooks/useScreenSize";
-import { capitalizeString } from "@/utils/string";
 import { Tab, TabGroup, TabList, TabPanel, TabPanels } from "@headlessui/react";
-import { experimental_useObject as useObject } from "ai/react";
 import {
   CircleAlert,
   FileText,
@@ -20,22 +15,34 @@ import {
 import { useState } from "react";
 import { LoadingSkeleton } from "./LoadingSkeleton";
 import { Modal } from "./Modal";
+import { fetchCommentSummary } from "@/api/commentSummary";
 
 export function BestStories({ stories }: { stories: Story[] }) {
   const [selectedStory, setSelectedStory] = useState<Story | null>(null);
-
-  const { object, submit, isLoading, error } = useObject({
-    api: "/api/summary",
-    schema: commentSummarySchema,
-  });
+  const [loading, setLoading] = useState(false);
+  const [summary, setSummary] = useState<CommentSummary | null>(null);
+  const [error, setError] = useState(false);
 
   const handleSelectStory = async (story: Story) => {
+    setError(false);
     setSelectedStory(story);
-    submit({ story });
+    setLoading(true);
+
+    const result = await fetchCommentSummary(story);
+    setLoading(false);
+
+    if (!result) {
+      setSummary(null);
+      setError(true);
+    } else {
+      setSummary(result);
+    }
   };
 
   const handleClose = () => {
     setSelectedStory(null);
+    setSummary(null);
+    setError(false);
   };
 
   return (
@@ -54,9 +61,8 @@ export function BestStories({ stories }: { stories: Story[] }) {
         <Modal isOpen={!!selectedStory} onClose={handleClose}>
           {!error && (
             <SummaryBody
-              // @ts-expect-error - TODO: fix this
-              summary={object}
-              isLoading={isLoading}
+              summary={summary}
+              isLoading={loading}
               selectedStory={selectedStory}
               setSelectedStory={setSelectedStory}
             />
@@ -80,7 +86,7 @@ function SummaryBody({
   selectedStory,
   setSelectedStory,
 }: {
-  summary: Partial<CommentSummary> | undefined;
+  summary: CommentSummary | null;
   isLoading: boolean;
   selectedStory: Story;
   setSelectedStory: (story: Story | null) => void;
@@ -190,7 +196,7 @@ function SummaryDetail({
   summary,
   isLoading,
 }: {
-  summary: Partial<CommentSummary> | undefined;
+  summary: CommentSummary | null;
   isLoading: boolean;
 }) {
   const screenSize = useScreenSize();
@@ -243,7 +249,7 @@ function Summary({
   summary,
   isLoading,
 }: {
-  summary: Partial<CommentSummary> | undefined;
+  summary: CommentSummary | null;
   isLoading: boolean;
 }) {
   const screenSize = useScreenSize();
@@ -273,7 +279,7 @@ function Sentiment({
   summary,
   isLoading,
 }: {
-  summary: Partial<CommentSummary> | undefined;
+  summary: CommentSummary | null;
   isLoading: boolean;
 }) {
   return (
@@ -283,12 +289,28 @@ function Sentiment({
           <LoadingSkeleton />
         </div>
       ) : (
-        <div className="mt-6 md:mt-3">
-          <p className="text-lg font-bold">
-            <span> {capitalizeString(summary?.sentiment ?? "")}</span>{" "}
-            <span className="text-2xl">{summary?.sentimentEmoji}</span>
-          </p>
-          <p className="mt-4">{summary?.justification}</p>
+        <div>
+          <div className="w-[20rem]">
+            <div className="rounded-full overflow-hidden relative h-8 mt-6">
+              <div className="flex inset-0 absolute">
+                <div className="flex-1 bg-red-500"></div>
+                <div className="flex-1 bg-yellow-500"></div>
+                <div className="flex-1 bg-green-700"></div>
+              </div>
+
+              <div className="absolute top-0 bottom-0 w-4 bg-white border-4 border-gray-800 rounded-full left-[16.67%]"></div>
+            </div>
+
+            <div className="flex justify-between mt-2 text-sm font-medium">
+              <span className={"text-gray-400"}>Negative</span>
+              <span className={"text-gray-400"}>Neutral</span>
+              <span className={"text-gray-400"}>Positive</span>
+            </div>
+          </div>
+
+          <div className="mt-6 md:mt-3">
+            <p className="mt-4">{summary?.justification}</p>
+          </div>
         </div>
       )}
     </>
@@ -299,7 +321,7 @@ function KeyInsights({
   summary,
   isLoading,
 }: {
-  summary: Partial<CommentSummary> | undefined;
+  summary: CommentSummary | null;
   isLoading: boolean;
 }) {
   return (

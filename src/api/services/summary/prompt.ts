@@ -24,8 +24,7 @@ Please analyze these comments and provide an analysis as a JSON object. Your res
   - Notable disagreements or debates
   - Interesting questions raised
   - Technical details or examples shared
-- 'sentiment' - string: [REQUIRED] An overall sentiment analysis of the comments, categorizing them as either positive, negative, or neutral. Consider the tone, language, and content of the comments when making this determination. This should be 1-3 words not separated by dashes.
-- 'sentimentEmoji' - string: [REQUIRED] A single emoji representing the sentiment of the comments.
+- 'sentiment' - string: [REQUIRED] An overall sentiment analysis of the comments, categorizing them as either positive, negative, or neutral. Consider the tone, language, and content of the comments when making this determination. This should be either positive, negative, or neutral.
 - 'justification' - string: [REQUIRED] A brief explanation of why you chose this sentiment, citing specific examples from the comments.
 
 Remember to base your analysis solely on the provided comments and maintain objectivity in your summary and insights.
