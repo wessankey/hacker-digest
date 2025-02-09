@@ -9,7 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "@ai-sdk/anthropic": "^1.0.5",
+    "@ai-sdk/openai": "^1.1.9",
     "@headlessui/react": "^2.2.0",
     "ai": "^4.0.21",
     "firebase": "^11.1.0",

@@ -1,10 +1,10 @@
 import { createProvider } from "@/api/services/hackernews";
 import { prompt as promptSource } from "@/api/services/summary/prompt";
 import { commentSummarySchema } from "@/api/services/summary/schema";
-// import { anthropic } from "@ai-sdk/anthropic";
 import { streamObject } from "ai";
 import Handlebars from "handlebars";
-import { ollama } from "ollama-ai-provider";
+import { openai } from "@ai-sdk/openai";
+// import { ollama } from "ollama-ai-provider";
 
 Handlebars.registerHelper({
   json: function (context) {
@@ -30,8 +30,8 @@ export async function POST(req: Request) {
   });
 
   const result = streamObject({
-    // model: anthropic("claude-3-5-sonnet-latest"),
-    model: ollama("llama3.2"),
+    // @ts-expect-error - not sure why this is an issue
+    model: openai("gpt-3.5-turbo"),
     system:
       "You are a helpful assistant that summarizes comments from a Hacker News story.",
     prompt: prompt,

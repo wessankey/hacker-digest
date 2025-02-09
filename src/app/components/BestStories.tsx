@@ -8,18 +8,18 @@ import {
 import { useScreenSize } from "@/hooks/useScreenSize";
 import { capitalizeString } from "@/utils/string";
 import { Tab, TabGroup, TabList, TabPanel, TabPanels } from "@headlessui/react";
+import { experimental_useObject as useObject } from "ai/react";
 import {
   CircleAlert,
+  FileText,
   Lightbulb,
+  MessageCircle,
   RefreshCcw,
   SquareArrowOutUpRight,
-  FileText,
-  MessageCircle,
 } from "lucide-react";
 import { useState } from "react";
 import { LoadingSkeleton } from "./LoadingSkeleton";
 import { Modal } from "./Modal";
-import { experimental_useObject as useObject } from "ai/react";
 
 export function BestStories({ stories }: { stories: Story[] }) {
   const [selectedStory, setSelectedStory] = useState<Story | null>(null);
@@ -52,9 +52,11 @@ export function BestStories({ stories }: { stories: Story[] }) {
 
       {selectedStory && (
         <Modal isOpen={!!selectedStory} onClose={handleClose}>
-          {object && (
+          {!error && (
             <SummaryBody
+              // @ts-expect-error - TODO: fix this
               summary={object}
+              isLoading={isLoading}
               selectedStory={selectedStory}
               setSelectedStory={setSelectedStory}
             />
@@ -66,12 +68,6 @@ export function BestStories({ stories }: { stories: Story[] }) {
               onClose={handleClose}
             />
           )}
-
-          {isLoading && (
-            <div className="mt-6">
-              <LoadingSkeleton />
-            </div>
-          )}
         </Modal>
       )}
     </div>
@@ -80,10 +76,12 @@ export function BestStories({ stories }: { stories: Story[] }) {
 
 function SummaryBody({
   summary,
+  isLoading,
   selectedStory,
   setSelectedStory,
 }: {
-  summary: Partial<CommentSummary>;
+  summary: Partial<CommentSummary> | undefined;
+  isLoading: boolean;
   selectedStory: Story;
   setSelectedStory: (story: Story | null) => void;
 }) {
@@ -114,7 +112,7 @@ function SummaryBody({
           </a>
         </div>
 
-        <SummaryDetail summary={summary} />
+        <SummaryDetail summary={summary} isLoading={isLoading} />
       </div>
 
       <div className="w-full flex-shrink-0 border-t border-gray-300 dark:border-gray-700 mt-4">
@@ -188,19 +186,25 @@ function StoryTile({
   );
 }
 
-function SummaryDetail({ summary }: { summary: Partial<CommentSummary> }) {
+function SummaryDetail({
+  summary,
+  isLoading,
+}: {
+  summary: Partial<CommentSummary> | undefined;
+  isLoading: boolean;
+}) {
   const screenSize = useScreenSize();
 
   if (screenSize === "xs" || screenSize === "sm") {
     return (
       <div>
-        <Summary summary={summary} />
+        <Summary summary={summary} isLoading={isLoading} />
         <div className="border-b border-gray-300 mt-6" />
 
-        <Sentiment summary={summary} />
+        <Sentiment summary={summary} isLoading={isLoading} />
         <div className="border-b border-gray-300 mt-6" />
 
-        <KeyInsights summary={summary} />
+        <KeyInsights summary={summary} isLoading={isLoading} />
       </div>
     );
   }
@@ -217,15 +221,15 @@ function SummaryDetail({ summary }: { summary: Partial<CommentSummary> }) {
             </TabList>
             <TabPanels className="md:h-[19.5rem] overflow-y-auto">
               <TabPanel key="name" className="rounded-xl px-3">
-                <Summary summary={summary} />
+                <Summary summary={summary} isLoading={isLoading} />
               </TabPanel>
 
               <TabPanel key="sentiment" className="rounded-xl px-3">
-                <Sentiment summary={summary} />
+                <Sentiment summary={summary} isLoading={isLoading} />
               </TabPanel>
 
               <TabPanel key="insights" className="rounded-xl px-3">
-                <KeyInsights summary={summary} />
+                <KeyInsights summary={summary} isLoading={isLoading} />
               </TabPanel>
             </TabPanels>
           </TabGroup>
@@ -235,46 +239,88 @@ function SummaryDetail({ summary }: { summary: Partial<CommentSummary> }) {
   );
 }
 
-function Summary({ summary }: { summary: Partial<CommentSummary> }) {
+function Summary({
+  summary,
+  isLoading,
+}: {
+  summary: Partial<CommentSummary> | undefined;
+  isLoading: boolean;
+}) {
   const screenSize = useScreenSize();
   const isMobile = screenSize === "xs" || screenSize === "sm";
 
   return (
-    <div className="mt-6  md:mt-3">
-      {isMobile && <p className="text-lg font-bold">Summary</p>}
-      {summary?.summary?.map((paragraph, index) => (
-        <p key={index} className="mb-4">
-          {paragraph}
-        </p>
-      ))}
-    </div>
+    <>
+      {isLoading && !summary?.summary ? (
+        <div className="mt-6">
+          <LoadingSkeleton />
+        </div>
+      ) : (
+        <div className="mt-6  md:mt-3">
+          {isMobile && <p className="text-lg font-bold">Summary</p>}
+          {summary?.summary?.map((paragraph, index) => (
+            <p key={index} className="mb-4">
+              {paragraph}
+            </p>
+          ))}
+        </div>
+      )}
+    </>
   );
 }
 
-function Sentiment({ summary }: { summary: Partial<CommentSummary> }) {
+function Sentiment({
+  summary,
+  isLoading,
+}: {
+  summary: Partial<CommentSummary> | undefined;
+  isLoading: boolean;
+}) {
   return (
-    <div className="mt-6 md:mt-3">
-      <p className="text-lg font-bold">
-        <span> {capitalizeString(summary?.sentiment ?? "")}</span>{" "}
-        <span className="text-2xl">{summary?.sentimentEmoji}</span>
-      </p>
-      <p className="mt-4">{summary?.justification}</p>
-    </div>
+    <>
+      {isLoading && !summary?.sentiment ? (
+        <div className="mt-6">
+          <LoadingSkeleton />
+        </div>
+      ) : (
+        <div className="mt-6 md:mt-3">
+          <p className="text-lg font-bold">
+            <span> {capitalizeString(summary?.sentiment ?? "")}</span>{" "}
+            <span className="text-2xl">{summary?.sentimentEmoji}</span>
+          </p>
+          <p className="mt-4">{summary?.justification}</p>
+        </div>
+      )}
+    </>
   );
 }
 
-function KeyInsights({ summary }: { summary: Partial<CommentSummary> }) {
+function KeyInsights({
+  summary,
+  isLoading,
+}: {
+  summary: Partial<CommentSummary> | undefined;
+  isLoading: boolean;
+}) {
   return (
-    <div className="mt-6 md:mt-3">
-      <ul className="list-none list-inside space-y-4">
-        {summary?.keyInsights?.map((insight) => (
-          <li key={insight} className="flex items-start gap-3">
-            <Lightbulb className="w-5 h-5 text-amber-500 mt-1 flex-shrink-0" />
-            <span>{insight}</span>
-          </li>
-        ))}
-      </ul>
-    </div>
+    <>
+      {isLoading && !summary?.keyInsights ? (
+        <div className="mt-6">
+          <LoadingSkeleton />
+        </div>
+      ) : (
+        <div className="mt-6 md:mt-3">
+          <ul className="list-none list-inside space-y-4">
+            {summary?.keyInsights?.map((insight) => (
+              <li key={insight} className="flex items-start gap-3">
+                <Lightbulb className="w-5 h-5 text-amber-500 mt-1 flex-shrink-0" />
+                <span>{insight}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
+    </>
   );
 }
 
