@@ -17,7 +17,7 @@ Below are the comments associated with this story. Comments are structured as a 
 </comments>
 
 Please analyze these comments and provide an analysis as a JSON object. Your response MUST include ALL required fields, especially the 'keyInsights' field which is critical and must never be omitted. If you cannot identify enough key insights, include broader observations or patterns as insights instead. The response must contain the following fields:
-- 'summary' - array of strings: [REQUIRED] A general summary of the discussion, focusing on the main themes and points of agreement or disagreement among commenters. This should be formatted as an array of strings, each representing a paragraph of the summary.
+- 'summary' - array of strings: [REQUIRED] A general summary of the discussion, focusing on the main themes and points of agreement or disagreement among commenters. This should be formatted as an array of strings, each representing a paragraph of the summary. There must be at least two paragraphs.
 - 'keyInsights' - array of strings: [REQUIRED] An array of 3-5 strings highlighting key insights or notable opinions expressed in the comments. These should represent the most interesting or impactful points made by commenters. If distinct insights are limited, include:
   - Patterns in how users discuss the topic
   - Common perspectives or assumptions
