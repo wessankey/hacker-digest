@@ -12,7 +12,11 @@ import { CommentSummary } from "../summary/schema";
 const serviceAccount = {
   type: "service_account",
   project_id: process.env.FIREBASE_PROJECT_ID,
-  private_key_id: process.env.FIREBASE_PRIVATE_KEY_ID,
+  privateKey: process.env.FIREBASE_PRIVATE_KEY
+    ? process.env.FIREBASE_PRIVATE_KEY.includes('"')
+      ? JSON.parse(process.env.FIREBASE_PRIVATE_KEY)
+      : process.env.FIREBASE_PRIVATE_KEY
+    : undefined,
   private_key: process.env.FIREBASE_PRIVATE_KEY,
   client_email: process.env.FIREBASE_CLIENT_EMAIL,
   client_id: process.env.FIREBASE_CLIENT_ID,
