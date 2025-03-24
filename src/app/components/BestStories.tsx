@@ -64,7 +64,7 @@ export function BestStories({ stories }: { stories: Story[] }) {
               summary={summary}
               isLoading={loading}
               selectedStory={selectedStory}
-              setSelectedStory={setSelectedStory}
+              handleClose={handleClose}
             />
           )}
 
@@ -84,12 +84,12 @@ function SummaryBody({
   summary,
   isLoading,
   selectedStory,
-  setSelectedStory,
+  handleClose,
 }: {
   summary: CommentSummary | null;
   isLoading: boolean;
   selectedStory: Story;
-  setSelectedStory: (story: Story | null) => void;
+  handleClose: () => void;
 }) {
   return (
     <div className="flex flex-col items-start justify-between md:h-[31rem">
@@ -124,7 +124,7 @@ function SummaryBody({
       <div className="w-full flex-shrink-0 border-t border-gray-300 dark:border-gray-700 mt-4">
         <button
           className="mt-5 dark:bg-indigo-600 bg-indigo-300 hover:bg-indigo-400  dark:hover:bg-indigo-700 dark:text-white text-gray-700 px-4 py-2 rounded-md font-bold"
-          onClick={() => setSelectedStory(null)}
+          onClick={handleClose}
         >
           Close
         </button>
@@ -298,7 +298,15 @@ function Sentiment({
                 <div className="flex-1 bg-green-700"></div>
               </div>
 
-              <div className="absolute top-0 bottom-0 w-4 bg-white border-4 border-gray-800 rounded-full left-[16.67%]"></div>
+              <div
+                className={`absolute top-0 bottom-0 w-4 bg-white border-4 border-gray-800 rounded-full ${
+                  summary?.sentiment === "positive"
+                    ? "right-[12.67%]"
+                    : summary?.sentiment === "neutral"
+                    ? "left-[48.5%]"
+                    : "left-[16.67%]"
+                }`}
+              ></div>
             </div>
 
             <div className="flex justify-between mt-2 text-sm font-medium">
