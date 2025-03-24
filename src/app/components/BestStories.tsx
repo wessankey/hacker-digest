@@ -46,7 +46,7 @@ export function BestStories({ stories }: { stories: Story[] }) {
   };
 
   return (
-    <div className="my-10 grid lg:grid-cols-4 gap-x-12 gap-y-4 lg:max-w-[850px] md:grid-cols-2 md:max-w-[600px] max-w-full grid-cols-1">
+    <div className="my-10 grid lg:grid-cols-4 gap-x-12 gap-y-4 lg:max-w-[1035px] md:grid-cols-2 md:max-w-[600px] max-w-full grid-cols-1">
       {stories.map((story) => {
         return (
           <StoryTile
@@ -184,7 +184,7 @@ function StoryTile({
 }) {
   return (
     <div
-      className="h-24 md:w-64 lg:w-48 w-full rounded-md p-4 flex-shrink-0 text-center hover:scale-105  shadow-lg hover:shadow-md transition-shadow duration-200 hover:cursor-pointer flex items-center justify-center dark:bg-indigo-700  bg-indigo-300 bg-opacity-50 font-semibold"
+      className="h-28 md:w-64 lg:w-56 w-full rounded-md p-4 flex-shrink-0 text-center hover:scale-105  shadow-lg hover:shadow-md transition-shadow duration-200 hover:cursor-pointer flex items-center justify-center dark:bg-indigo-700  bg-indigo-300 bg-opacity-50 font-semibold"
       onClick={() => onSelect(story)}
     >
       <p className="blur-none bg-opacity-0 line-clamp-2">{story.title}</p>
@@ -263,7 +263,7 @@ function Summary({
         </div>
       ) : (
         <div className="mt-6  md:mt-3">
-          {isMobile && <p className="text-lg font-bold">Summary</p>}
+          {isMobile && <p className="text-xl font-bold pb-3">Summary</p>}
           {summary?.summary?.map((paragraph, index) => (
             <p key={index} className="mb-4">
               {paragraph}
@@ -282,6 +282,8 @@ function Sentiment({
   summary: CommentSummary | null;
   isLoading: boolean;
 }) {
+  const screenSize = useScreenSize();
+  const isMobile = screenSize === "xs" || screenSize === "sm";
   return (
     <>
       {isLoading && !summary?.sentiment ? (
@@ -291,6 +293,7 @@ function Sentiment({
       ) : (
         <div>
           <div className="w-[20rem]">
+            {isMobile && <p className="text-xl font-bold pt-3">Sentiment</p>}
             <div className="rounded-full overflow-hidden relative h-8 mt-6">
               <div className="flex inset-0 absolute">
                 <div className="flex-1 bg-red-500"></div>
@@ -332,6 +335,9 @@ function KeyInsights({
   summary: CommentSummary | null;
   isLoading: boolean;
 }) {
+  const screenSize = useScreenSize();
+  const isMobile = screenSize === "xs" || screenSize === "sm";
+
   return (
     <>
       {isLoading && !summary?.keyInsights ? (
@@ -340,6 +346,7 @@ function KeyInsights({
         </div>
       ) : (
         <div className="mt-6 md:mt-3">
+          {isMobile && <p className="text-xl font-bold pb-3">Key Insights</p>}
           <ul className="list-none list-inside space-y-4">
             {summary?.keyInsights?.map((insight) => (
               <li key={insight} className="flex items-start gap-3">
